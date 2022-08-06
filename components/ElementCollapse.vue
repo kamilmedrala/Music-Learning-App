@@ -4,8 +4,8 @@
       <span
         class="block pr-3 w-full text-xl whitespace-nowrap overflow-ellipsis overflow-hidden"
       >
-        {{ selected }}</span
-      >
+        {{ selected }}
+      </span>
       <div class="flex items-center">
         <svg
           class="stroke-current text-green-3000 rotate-180 transition duration-300"
@@ -53,10 +53,14 @@ export default {
   name: "ElementCollapse",
   props: {
     options: Array,
+    defaultSelect: {
+      type: String,
+      default: "Wybierz",
+    },
   },
   data() {
     return {
-      selected: "Wybierz",
+      selected: this.defaultSelect,
       collapsed: true,
     };
   },
@@ -74,6 +78,7 @@ export default {
     selectOption(name) {
       this.selected = name;
       this.toggleCollapse();
+      this.$emit("optionSelect", this.selected);
     },
   },
 };

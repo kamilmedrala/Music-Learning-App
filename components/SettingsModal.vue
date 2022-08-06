@@ -6,7 +6,7 @@
       <div class="flex flex-col text-white">
         <h3 class="mb-10 font-main text-4xl text-center">Select device</h3>
         <span class="font-body text-xl mb-3"> Audio input</span>
-        <div class="max-w-[400px] text-black mb-12">
+        <div class="max-w-[400px] text-black mb-10">
           <ElementCollapse
             :defaultSelect="
               storedSettings.input ? storedSettings.input.label : 'Wybierzeee'

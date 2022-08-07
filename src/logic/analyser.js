@@ -2,15 +2,15 @@ export default class Analyser {
   constructor() {
     this.audioCtx = null;
     this.analyser = null;
-
     this.isInitialized = false;
-    this.input = "";
-    const that = this;
+
+    const thisClass = this;
+
     requestAnimationFrame(function log() {
-      if (that.analyser) {
-        let bufferLength = that.analyser.frequencyBinCount;
+      if (thisClass.analyser) {
+        let bufferLength = thisClass.analyser.frequencyBinCount;
         let dataArray = new Uint8Array(bufferLength);
-        that.analyser.getByteFrequencyData(dataArray);
+        thisClass.analyser.getByteFrequencyData(dataArray);
         const level = Math.max.apply(null, dataArray);
         console.log(level);
       }
@@ -52,5 +52,5 @@ export default class Analyser {
     this.startAnalyser(audioSource);
   }
 
-  setOutput() {}
+  setOutput(audioOutput) {}
 }

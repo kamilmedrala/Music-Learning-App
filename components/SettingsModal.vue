@@ -51,45 +51,23 @@ export default {
   watch: {
     "storedSettings.input"(data) {
       if (data.id) {
-        this.$Analyser.setInput(input.id);
+        this.$Analyser.setInput(data.id);
       }
     },
-    // 'storedSettings.output'(data) {
-    //   if (data.id) {
-    //     this.$Analyser.setOutput(output.id);
-    //   }
-    // },
+    "storedSettings.output"(data) {
+      if (data.id) {
+        this.$Analyser.setOutput(data.id);
+      }
+    },
   },
   mounted() {
     const vm = this;
     if (!this.$Analyser.isInitialized) {
       this.$Analyser.startAnalyser().then(() => {
-        vm.$Analyser.getDevices().then(function (devices) {
-          devices.forEach(function (device) {
-            if (device.kind === "audioinput") {
-              vm.audioInputs.push({ label: device.label, id: device.deviceId });
-            } else if (device.kind === "audiooutput") {
-              vm.audioOutputs.push({
-                label: device.label,
-                id: device.deviceId,
-              });
-            }
-          });
-        });
+        vm.listDevices();
       });
     } else {
-      vm.$Analyser.getDevices().then(function (devices) {
-        devices.forEach(function (device) {
-          if (device.kind === "audioinput") {
-            vm.audioInputs.push({ label: device.label, id: device.deviceId });
-          } else if (device.kind === "audiooutput") {
-            vm.audioOutputs.push({
-              label: device.label,
-              id: device.deviceId,
-            });
-          }
-        });
-      });
+      this.listDevices();
     }
   },
   methods: {
@@ -104,12 +82,28 @@ export default {
       });
     },
     setOutput(value) {
+      let outputId = this.audioOutputs.find((obj) => obj.label == value).id;
       this.$store.commit("setSettings", {
         type: "output",
         data: {
           label: value,
-          id: this.audioOutputs.find((obj) => obj.label == value).id,
+          id: outputId,
         },
+      });
+    },
+    listDevices() {
+      const vm = this;
+      this.$Analyser.getDevices().then(function (devices) {
+        devices.forEach(function (device) {
+          if (device.kind === "audioinput") {
+            vm.audioInputs.push({ label: device.label, id: device.deviceId });
+          } else if (device.kind === "audiooutput") {
+            vm.audioOutputs.push({
+              label: device.label,
+              id: device.deviceId,
+            });
+          }
+        });
       });
     },
   },

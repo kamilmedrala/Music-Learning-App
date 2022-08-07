@@ -64,6 +64,11 @@ export default {
       collapsed: true,
     };
   },
+  watch: {
+    defaultSelect(value) {
+      this.selected = value;
+    },
+  },
   computed: {
     containerHeight() {
       return this.$refs.container.scrollHeight;

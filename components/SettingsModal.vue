@@ -9,7 +9,7 @@
         <div class="max-w-[400px] text-black mb-10">
           <ElementCollapse
             :defaultSelect="
-              storedSettings.input ? storedSettings.input.label : 'Wybierzeee'
+              storedSettings.input ? storedSettings.input.label : 'Wybierz'
             "
             :options="audioInputs.map((val) => val.label)"
             @optionSelect="setInput($event)"
@@ -48,54 +48,58 @@ export default {
       return { input: settings.input, output: settings.output };
     },
   },
+  watch: {
+    "storedSettings.input"(data) {
+      if (data.id) {
+        this.$Analyser.setInput(input.id);
+      }
+    },
+    // 'storedSettings.output'(data) {
+    //   if (data.id) {
+    //     this.$Analyser.setOutput(output.id);
+    //   }
+    // },
+  },
   mounted() {
     const vm = this;
-    navigator.mediaDevices.enumerateDevices().then(function (devices) {
-      devices.forEach(function (device) {
-        if (device.kind === "audioinput") {
-          vm.audioInputs.push({ label: device.label, id: device.deviceId });
-        } else if (device.kind === "audiooutput") {
-          vm.audioOutputs.push({ label: device.label, id: device.deviceId });
-        }
+    if (!this.$Analyser.isInitialized) {
+      this.$Analyser.startAnalyser().then(() => {
+        vm.$Analyser.getDevices().then(function (devices) {
+          devices.forEach(function (device) {
+            if (device.kind === "audioinput") {
+              vm.audioInputs.push({ label: device.label, id: device.deviceId });
+            } else if (device.kind === "audiooutput") {
+              vm.audioOutputs.push({
+                label: device.label,
+                id: device.deviceId,
+              });
+            }
+          });
+        });
       });
-    });
-    // const analyser = new Analyser();
-    // navigator.mediaDevices
-    //   .getUserMedia({ video: false, audio: true })
-    //   .then((stream) => {
-    //     console.log(stream);
-    //     return stream;
-    //     // window.localStream = stream; // A
-    //     // window.localAudio.srcObject = stream; // B
-    //     // window.localAudio.autoplay = true; // C
-    //   })
-    //   .catch((err) => {
-    //     console.error(`you got an error: ${err}`);
-    //   });
-    // navigator.mediaDevices
-    //   .getUserMedia({ video: false, audio: true })
-    //   .then((stream) => {
-    //     console.log(stream);
-    //     // window.localStream = stream; // A
-    //     // window.localAudio.srcObject = stream; // B
-    //     // window.localAudio.autoplay = true; // C
-    //   })
-    //   .catch((err) => {
-    //     console.error(`you got an error: ${err}`);
-    //   });
-    // navigator.mediaDevices.enumerateDevices().then(function (devices) {
-    //   devices.forEach(function (device) {
-    //     console.log(`${device.kind}: ${device.label} id = ${device.deviceId}`);
-    //   });
-    // });
+    } else {
+      vm.$Analyser.getDevices().then(function (devices) {
+        devices.forEach(function (device) {
+          if (device.kind === "audioinput") {
+            vm.audioInputs.push({ label: device.label, id: device.deviceId });
+          } else if (device.kind === "audiooutput") {
+            vm.audioOutputs.push({
+              label: device.label,
+              id: device.deviceId,
+            });
+          }
+        });
+      });
+    }
   },
   methods: {
     setInput(value) {
+      let inputId = this.audioInputs.find((obj) => obj.label == value).id;
       this.$store.commit("setSettings", {
         type: "input",
         data: {
           label: value,
-          id: this.audioInputs.find((obj) => obj.label == value).id,
+          id: inputId,
         },
       });
     },

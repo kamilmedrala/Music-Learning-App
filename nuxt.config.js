@@ -32,7 +32,7 @@ export default {
   css: [],
 
   // Plugins to run before rendering page: https://go.nuxtjs.dev/config-plugins
-  plugins: [],
+  plugins: [{ ssr: false, src: "~plugins/init.js" }],
 
   // Auto import components: https://go.nuxtjs.dev/config-components
   components: true,

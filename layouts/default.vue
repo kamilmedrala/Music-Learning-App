@@ -1,8 +1,11 @@
 <template>
-  <div class="bg-green-1000">
-    <div class="px-[5%] md:px-[10%] h-screen mx-auto max-w-screen-2xl">
+  <div class="relative min-h-screen bg-green-1000">
+    <div
+      class="relative z-10 px-[5%] md:px-[10%] h-screen mx-auto max-w-screen-2xl"
+    >
       <Nuxt />
     </div>
+    <BgStrings />
   </div>
 </template>
 

@@ -51,7 +51,7 @@ export default {
           amplitude = analyzer.getOutputLevel() / 2;
         }
         for (let i = 0; i < points.length; i++) {
-          points[i].y = Math.sin(i / 80) * amplitude + 0.4;
+          points[i].y = Math.sin((i * amplitude) / 20) * amplitude + 0.4;
           // points[i].x = points[i].x + increment / 1000;
         }
 

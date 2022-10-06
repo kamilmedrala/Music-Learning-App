@@ -5,7 +5,8 @@
 </template>
 
 <script>
-import * as THREE from "three/build/three.module";
+import * as THREE from "three";
+import Render from "../src/visuals/Render";
 export default {
   data() {
     return {
@@ -18,47 +19,35 @@ export default {
   methods: {
     initCanvas() {
       const container = this.$refs["canvas-container"];
-      const cameraAspect = container.clientWidth / container.clientHeight;
-      const cameraFov = THREE.MathUtils.radToDeg(
-        2 *
-          Math.atan(Math.tan(THREE.MathUtils.degToRad(75) * 0.5) / cameraAspect)
-      );
+      const render = new Render(container);
+      const scene = render.scene;
 
-      const camera = new THREE.PerspectiveCamera(
-        cameraFov,
-        cameraAspect,
-        0.1,
-        1000
-      );
-
-      const scene = new THREE.Scene();
-      scene.background = new THREE.Color("rgb(237, 246, 249)");
-      const renderer = new THREE.WebGLRenderer();
-      renderer.setSize(container.clientWidth, container.clientHeight);
-      container.appendChild(renderer.domElement);
-
-      window.addEventListener("resize", function () {
-        camera.aspect = container.clientWidth / container.clientHeight;
-        camera.fov = cameraFov;
-        camera.updateProjectionMatrix();
-        renderer.setSize(container.clientWidth, container.clientHeight);
-        console.log(container.clientWidth, container.clientHeight);
+      const lineMaterial = new THREE.LineBasicMaterial({
+        color: 0x006d77,
+        linewidth: 20,
       });
 
-      const geometry = new THREE.BoxGeometry(1, 1, 1);
-      const material = new THREE.MeshBasicMaterial({ color: 0x00ff00 });
-      const cube = new THREE.Mesh(geometry, material);
-      scene.add(cube);
+      const curve = new THREE.SplineCurve([
+        new THREE.Vector2(-4, 0),
+        new THREE.Vector2(-2, 0.5),
+        new THREE.Vector2(2, -0.5),
+        new THREE.Vector2(4, 0),
+      ]);
 
-      camera.position.z = 5;
+      const points = curve.getPoints(100);
+
+      const lineGeometry = new THREE.BufferGeometry().setFromPoints(points);
+
+      const line = new THREE.Line(lineGeometry, lineMaterial);
+      scene.add(line);
+
+      window.addEventListener("resize", function () {
+        render.renderResize();
+      });
 
       function animate() {
         requestAnimationFrame(animate);
-
-        cube.rotation.x += 0.01;
-        cube.rotation.y += 0.01;
-
-        renderer.render(scene, camera);
+        render.renderGraphics();
       }
       animate();
     },

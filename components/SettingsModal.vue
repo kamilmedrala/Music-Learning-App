@@ -1,7 +1,7 @@
 <template>
   <div class="absolute inset-0 flex items-center justify-center py-20">
     <div
-      class="w-[450px] h-full max-h-[600px] py-10 px-20 bg-green-3000/60 rounded-3xl backdrop-blur-lg overflow-auto"
+      class="w-[450px] h-full max-h-[600px] py-10 px-20 bg-green-3000/50 rounded-3xl backdrop-blur-md overflow-auto"
     >
       <div class="flex flex-col text-white">
         <h3 class="mb-10 font-main text-4xl text-center">Select device</h3>
@@ -50,12 +50,12 @@ export default {
   },
   watch: {
     "storedSettings.input"(data) {
-      if (data.id) {
+      if (typeof data.id == "string") {
         this.$Analyser.setInput(data.id);
       }
     },
     "storedSettings.output"(data) {
-      if (data.id) {
+      if (typeof data.id == "string") {
         this.$Analyser.setOutput(data.id);
       }
     },
@@ -92,6 +92,8 @@ export default {
       });
     },
     listDevices() {
+      this.audioInputs.push({ label: "None", id: "" });
+      this.audioOutputs.push({ label: "None", id: "" });
       const vm = this;
       this.$Analyser.getDevices().then(function (devices) {
         devices.forEach(function (device) {

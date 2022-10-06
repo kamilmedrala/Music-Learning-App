@@ -57,6 +57,16 @@ export default class Analyser {
     });
   }
 
+  getOutputLevel() {
+    if (this.isInitialized) {
+      let bufferLength = this.analyser.frequencyBinCount;
+      let dataArray = new Uint8Array(bufferLength);
+      this.analyser.getByteFrequencyData(dataArray);
+      const level = Math.max.apply(null, dataArray) / 255;
+      return level;
+    }
+  }
+
   setInput(audioSource) {
     if (this.audioCtx?.state != "closed" && this.isInitialized)
       this.audioCtx.close();

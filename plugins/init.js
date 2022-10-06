@@ -7,6 +7,9 @@ window.onNuxtReady((app) => {
     localStorage.setItem("store", JSON.stringify(state));
   });
   app.$store.commit("initialiseStore");
+  if (app.$store) {
+    // console.log(app);
+  }
 });
 
 export default ({ app }, inject) => {

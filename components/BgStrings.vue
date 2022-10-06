@@ -29,23 +29,39 @@ export default {
 
       const curve = new THREE.SplineCurve([
         new THREE.Vector2(-4, 0),
-        new THREE.Vector2(-2, 0.5),
-        new THREE.Vector2(2, -0.5),
         new THREE.Vector2(4, 0),
       ]);
 
-      const points = curve.getPoints(100);
+      const points = curve.getPoints(500);
 
       const lineGeometry = new THREE.BufferGeometry().setFromPoints(points);
-
       const line = new THREE.Line(lineGeometry, lineMaterial);
+      line.matrixAutoUpdate = true;
       scene.add(line);
 
       window.addEventListener("resize", function () {
         render.renderResize();
       });
 
+      let increment = 0;
+      const analyzer = this.$Analyser;
+      let amplitude = 0.2;
       function animate() {
+        if (analyzer.isInitialized) {
+          amplitude = analyzer.getOutputLevel() / 2;
+        }
+        for (let i = 0; i < points.length; i++) {
+          points[i].y = Math.sin(i / 80) * amplitude + 0.4;
+          // points[i].x = points[i].x + increment / 1000;
+        }
+
+        let geometry = new THREE.BufferGeometry().setFromPoints(points);
+
+        line.geometry.dispose();
+        line.geometry = geometry;
+
+        increment++;
+
         requestAnimationFrame(animate);
         render.renderGraphics();
       }

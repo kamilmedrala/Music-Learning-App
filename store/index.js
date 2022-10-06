@@ -20,6 +20,9 @@ export const mutations = {
       this.replaceState(
         Object.assign(state, JSON.parse(localStorage.getItem("store")))
       );
+      if (state.settings?.output?.id) {
+        this.$Analyser.startAnalyser(state.settings.output.id);
+      }
     }
   },
   setSettings(state, { type, data }) {

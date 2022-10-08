@@ -46,9 +46,20 @@ export default {
       let increment = 0;
       const analyzer = this.$Analyser;
       let amplitude = 0.2;
+      let amplitudeBuffer = [];
       function animate() {
         if (analyzer.isInitialized) {
+          // filling buffer
           amplitude = analyzer.getOutputLevel() / 2;
+
+          if (amplitudeBuffer.length < 5) {
+            amplitudeBuffer.unshift(amplitude);
+          }
+          amplitudeBuffer.unshift(amplitude);
+          amplitudeBuffer.pop();
+
+          amplitude =
+            amplitudeBuffer.reduce((a, b) => a + b, 0) / amplitudeBuffer.length;
         }
         for (let i = 0; i < points.length; i++) {
           points[i].y = Math.sin((i * amplitude) / 20) * amplitude + 0.4;

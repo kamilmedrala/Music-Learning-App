@@ -9,7 +9,7 @@
       />
       <nuxt-link
         to="start"
-        class="ml-7 mb-5 px-5 pt-2 pb-1 border border-solid border-green-3000 font-body text-lg text-green-3000 rounded-full hover:bg-green-2000/10 transition duration-300"
+        class="inline-block ml-7 mb-5 px-5 pt-2 pb-1 border border-solid border-green-3000 font-body text-lg text-green-3000 rounded-full hover:bg-green-2000/10 bg-green-1000/10 backdrop-blur-sm transition duration-300"
       >
         Get Started
       </nuxt-link>

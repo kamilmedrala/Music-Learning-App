@@ -36,7 +36,7 @@ export default class Wave {
   updateWave(amplitude) {
     for (let i = 0; i < this.linePoints.length; i++) {
       this.linePoints[i].y =
-        Math.sin(i / this.waveLength + this.phaseShift / 100) *
+        Math.sin(i / this.waveLength + this.phaseShift / 200) *
         (amplitude + 0.1);
     }
 
@@ -44,6 +44,6 @@ export default class Wave {
 
     this.line.geometry.dispose();
     this.line.geometry = geometry;
-    this.phaseShift = this.phaseShift + 1 + amplitude * 5;
+    this.phaseShift = this.phaseShift + 1 + amplitude * 16;
   }
 }

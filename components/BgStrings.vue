@@ -22,8 +22,8 @@ export default {
       const render = new Render(container);
       const scene = render.scene;
       const waveLow = new Wave(20, 1);
-      const waveMid = new Wave(15, 0.6);
-      const waveHigh = new Wave(10, 0.2);
+      const waveMid = new Wave(16, 0.6);
+      const waveHigh = new Wave(12, 0.2);
 
       scene.add(waveLow.line, waveMid.line, waveHigh.line);
 

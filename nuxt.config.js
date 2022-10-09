@@ -1,6 +1,9 @@
 export default {
   // Target: https://go.nuxtjs.dev/config-target
   target: "static",
+  router: {
+    base: "/Music-Learning-App/",
+  },
 
   // Global page headers: https://go.nuxtjs.dev/config-head
   head: {
@@ -32,7 +35,7 @@ export default {
   css: ["@/assets/css/main.css"],
 
   // Plugins to run before rendering page: https://go.nuxtjs.dev/config-plugins
-  plugins: [{ ssr: false, src: "~plugins/init.js" }], 
+  plugins: [{ ssr: false, src: "~plugins/init.js" }],
 
   // Auto import components: https://go.nuxtjs.dev/config-components
   components: true,

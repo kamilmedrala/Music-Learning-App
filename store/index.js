@@ -23,6 +23,9 @@ export const mutations = {
       if (state.settings?.output?.id) {
         this.$Analyser.startAnalyser(state.settings.output.id);
       }
+      if (state.settings?.input?.id) {
+        this.$Analyser.startAnalyser(state.settings.input.id);
+      }
     }
   },
   setSettings(state, { type, data }) {

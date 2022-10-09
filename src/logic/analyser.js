@@ -32,7 +32,7 @@ export default class Analyser {
         thisClass.audioCtx = new AudioContext();
         thisClass.analyser = thisClass.audioCtx.createAnalyser();
         thisClass.analyser.smoothingTimeConstant = 0.8;
-        thisClass.analyser.fftSize = 1024;
+        thisClass.analyser.fftSize = 2048;
         const microphone = thisClass.audioCtx.createMediaStreamSource(stream);
         microphone.connect(thisClass.analyser);
         const dest = thisClass.audioCtx.createMediaStreamDestination();
@@ -62,8 +62,24 @@ export default class Analyser {
       let bufferLength = this.analyser.frequencyBinCount;
       let dataArray = new Uint8Array(bufferLength);
       this.analyser.getByteFrequencyData(dataArray);
-      const level = Math.max.apply(null, dataArray) / 255;
-      return level;
+      let low = dataArray.slice(0, 5);
+      let mid = dataArray.slice(6, 100);
+      let high = dataArray.slice(101, 1023);
+
+      //loudest freq detection demo
+      // let loudest = 0;
+      // for (let i = 0; i < dataArray.length; i++) {
+      //   if (dataArray[i] == Math.max.apply(null, low)) {
+      //     loudest = i * (this.audioCtx.sampleRate / 2 / bufferLength);
+      //   }
+      // }
+      // console.log(loudest);
+      const lowLevel = Math.max.apply(null, low) / 255;
+      const midLevel = Math.max.apply(null, mid) / 255;
+      const highLevel = Math.max.apply(null, high) / 255;
+
+      const levels = [lowLevel, midLevel, highLevel];
+      return levels;
     }
   }
 

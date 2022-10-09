@@ -31,7 +31,7 @@
 </template>
 
 <script>
-import Analyser from "../src/logic/analyser";
+import Analyser from "../src/logic/Analyser";
 import ElementCollapse from "./ElementCollapse.vue";
 
 export default {

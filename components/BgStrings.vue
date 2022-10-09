@@ -5,8 +5,8 @@
 </template>
 
 <script>
-import * as THREE from "three";
 import Render from "../src/visuals/Render";
+import Wave from "../src/visuals/Wave";
 export default {
   data() {
     return {
@@ -21,38 +21,31 @@ export default {
       const container = this.$refs["canvas-container"];
       const render = new Render(container);
       const scene = render.scene;
+      const waveLow = new Wave(20, 1);
+      const waveMid = new Wave(15, 0.6);
+      const waveHigh = new Wave(10, 0.2);
 
-      const lineMaterial = new THREE.LineBasicMaterial({
-        color: 0x006d77,
-        linewidth: 20,
-      });
-
-      const curve = new THREE.SplineCurve([
-        new THREE.Vector2(-4, 0),
-        new THREE.Vector2(4, 0),
-      ]);
-
-      const points = curve.getPoints(500);
-
-      const lineGeometry = new THREE.BufferGeometry().setFromPoints(points);
-      const line = new THREE.Line(lineGeometry, lineMaterial);
-      line.matrixAutoUpdate = true;
-      scene.add(line);
+      scene.add(waveLow.line, waveMid.line, waveHigh.line);
 
       window.addEventListener("resize", function () {
         render.renderResize();
       });
 
-      let increment = 0;
+      const bufferSize = 6;
       const analyzer = this.$Analyser;
-      let amplitude = 0.2;
+      let amplitude = 0.1;
+      let amplitudeMid = 0.1;
+      let amplitudeHigh = 0.1;
       let amplitudeBuffer = [];
+      let amplitudeMidBuffer = [];
+      let amplitudeHighBuffer = [];
+
       function animate() {
         if (analyzer.isInitialized) {
           // filling buffer
-          amplitude = analyzer.getOutputLevel() / 2;
+          amplitude = analyzer.getOutputLevel()[0] / 2;
 
-          if (amplitudeBuffer.length < 5) {
+          if (amplitudeBuffer.length < bufferSize) {
             amplitudeBuffer.unshift(amplitude);
           }
           amplitudeBuffer.unshift(amplitude);
@@ -60,18 +53,35 @@ export default {
 
           amplitude =
             amplitudeBuffer.reduce((a, b) => a + b, 0) / amplitudeBuffer.length;
+
+          amplitudeMid = analyzer.getOutputLevel()[1] / 2;
+
+          if (amplitudeMidBuffer.length < bufferSize) {
+            amplitudeMidBuffer.unshift(amplitudeMid);
+          }
+          amplitudeMidBuffer.unshift(amplitudeMid);
+          amplitudeMidBuffer.pop();
+
+          amplitudeMid =
+            amplitudeMidBuffer.reduce((a, b) => a + b, 0) /
+            amplitudeMidBuffer.length;
+
+          amplitudeHigh = analyzer.getOutputLevel()[2] / 2;
+
+          if (amplitudeHighBuffer.length < bufferSize) {
+            amplitudeHighBuffer.unshift(amplitudeHigh);
+          }
+          amplitudeHighBuffer.unshift(amplitudeHigh);
+          amplitudeHighBuffer.pop();
+
+          amplitudeHigh =
+            amplitudeHighBuffer.reduce((a, b) => a + b, 0) /
+            amplitudeHighBuffer.length;
         }
-        for (let i = 0; i < points.length; i++) {
-          points[i].y = Math.sin((i * amplitude) / 20) * amplitude + 0.4;
-          // points[i].x = points[i].x + increment / 1000;
-        }
-
-        let geometry = new THREE.BufferGeometry().setFromPoints(points);
-
-        line.geometry.dispose();
-        line.geometry = geometry;
-
-        increment++;
+        //update line geometry
+        waveLow.updateWave(amplitude);
+        waveMid.updateWave(amplitudeMid);
+        waveHigh.updateWave(amplitudeHigh);
 
         requestAnimationFrame(animate);
         render.renderGraphics();

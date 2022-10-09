@@ -1,4 +1,4 @@
-import Analyser from "../src/logic/analyser";
+import Analyser from "../src/logic/Analyser";
 import Vue from "vue";
 
 window.onNuxtReady((app) => {

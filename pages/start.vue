@@ -1,5 +1,7 @@
 <template>
-  <SettingsModal />
+  <div class="h-full">
+    <SettingsModal />
+  </div>
 </template>
 
 <script>

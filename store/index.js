@@ -3,7 +3,7 @@ export const state = () => ({
     name: null,
     input: null,
     output: null,
-    modalActive: false,
+    modalActive: true,
   },
 });
 

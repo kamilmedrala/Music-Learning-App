@@ -3,6 +3,14 @@
 @tailwind utilities;
 
 @layer base {
+
+  #__nuxt,
+  #__layout,
+  html,
+  body {
+    @apply h-full
+  }
+
   h1,
   h2,
   h3,
@@ -20,9 +28,7 @@
     @apply font-body text-base md:text-lg;
   }
 
-  *,
-  ::before,
-  ::after {
-    @apply backdrop-blur-0 backdrop-brightness-100 backdrop-contrast-100 backdrop-grayscale-0 backdrop-hue-rotate-0 backdrop-invert-0 backdrop-opacity-100 backdrop-saturate-100 backdrop-sepia-0;
+  .filter-fix {
+    @apply backdrop-brightness-100 backdrop-contrast-100 backdrop-grayscale-0 backdrop-hue-rotate-0 backdrop-invert-0 backdrop-opacity-100 backdrop-saturate-100 backdrop-sepia-0;
   }
 }

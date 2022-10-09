@@ -1,6 +1,6 @@
 <template>
   <div class="relative min-h-screen bg-green-1000 px-[5%] md:px-[10%]">
-    <div class="relative z-10 mx-auto w-full container min-h-screen">
+    <div class="relative z-10 mx-auto w-full container h-full min-h-screen">
       <Nuxt />
     </div>
     <BgStrings />

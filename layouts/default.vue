@@ -1,6 +1,6 @@
 <template>
   <div class="relative min-h-screen bg-green-1000 px-[5%] md:px-[10%]">
-    <div class="relative z-10 h-screen mx-auto w-full container">
+    <div class="relative z-10 mx-auto w-full container min-h-screen">
       <Nuxt />
     </div>
     <BgStrings />
@@ -21,19 +21,12 @@ export default {};
   @apply -translate-y-7 opacity-0;
 }
 
-h1,
-h2,
-h3,
-h4,
-h5,
-h6 {
-  @apply font-main text-5xl md:text-7xl;
+.zoom-enter-active,
+.zoom-leave-active {
+  @apply transform transition duration-300;
 }
-
-p,
-button,
-span,
-b {
-  @apply font-body text-base md:text-lg;
+.zoom-enter,
+.zoom-leave-to {
+  @apply scale-90 opacity-0;
 }
 </style>

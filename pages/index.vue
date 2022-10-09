@@ -1,6 +1,6 @@
 <template>
   <div
-    class="w-full h-full flex flex-col md:flex-row justify-center md:justify-between items-center"
+    class="w-full h-full min-h-screen flex flex-col md:flex-row justify-center md:justify-between items-center"
   >
     <div>
       <HeaderTitle

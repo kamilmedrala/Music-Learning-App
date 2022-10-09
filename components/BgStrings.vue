@@ -1,5 +1,5 @@
 <template>
-  <div class="absolute w-full h-full z-0 inset-0 pt-[50vh]">
+  <div class="fixed w-full h-full z-0 inset-0 pt-[50vh]">
     <div ref="canvas-container" class="w-full h-full overflow-hidden"></div>
   </div>
 </template>

@@ -1,12 +1,24 @@
 <template>
-  <div class="absolute inset-0 flex items-center justify-center py-20">
+  <div
+    class="absolute inset-0 flex items-center justify-center py-20 max-h-screen"
+  >
     <div
-      class="w-[450px] h-full max-h-[600px] py-10 px-10 md:px-20 bg-green-3000/50 rounded-3xl backdrop-blur-md overflow-auto"
+      class="relative w-[450px] h-full max-h-[600px] py-8 px-10 md:px-20 bg-green-3000/50 rounded-3xl backdrop-blur-sm overflow-auto"
     >
       <div class="flex flex-col text-white">
-        <h3 class="mb-10 font-main text-4xl text-center">Select device</h3>
-        <span class="font-body text-xl mb-3"> Audio input</span>
-        <div class="max-w-[400px] text-black mb-10">
+        <h3 class="mb-8 font-main text-4xl text-center">Settings</h3>
+        <span class="font-body text-xl mb-2"> Your name</span>
+        <div class="max-w-[400px] text-black mb-8">
+          <input
+            class="block p-3 w-full text-xl rounded-2xl whitespace-nowrap overflow-ellipsis overflow-hidden"
+            type="text"
+            name="name"
+            :value="storedSettings.name ? storedSettings.name : ''"
+            @change="setName($event.target.value)"
+          />
+        </div>
+        <span class="font-body text-xl mb-2"> Audio input</span>
+        <div class="max-w-[400px] text-black mb-6">
           <ElementCollapse
             :defaultSelect="
               storedSettings.input ? storedSettings.input.label : 'Wybierz'
@@ -15,8 +27,8 @@
             @optionSelect="setInput($event)"
           />
         </div>
-        <span class="font-body text-xl mb-3"> Audio output</span>
-        <div class="max-w-[400px] text-black">
+        <span class="font-body text-xl mb-2"> Audio output</span>
+        <div class="max-w-[400px] text-black mb-8">
           <ElementCollapse
             :defaultSelect="
               storedSettings.output ? storedSettings.output.label : 'Wybierz'
@@ -25,6 +37,12 @@
             @optionSelect="setOutput($event)"
           />
         </div>
+        <button
+          class="mx-auto px-5 pt-2 pb-1 rounded-2xl border border-white hover:bg-white/20 transition duration-300 text-xl text-white"
+          @click="closeModal()"
+        >
+          Done
+        </button>
       </div>
     </div>
   </div>
@@ -45,7 +63,11 @@ export default {
   computed: {
     storedSettings() {
       const settings = this.$store.getters.getSettings;
-      return { input: settings.input, output: settings.output };
+      return {
+        name: settings.name,
+        input: settings.input,
+        output: settings.output,
+      };
     },
   },
   watch: {
@@ -71,6 +93,18 @@ export default {
     }
   },
   methods: {
+    closeModal() {
+      this.$store.commit("setSettings", {
+        type: "modalActive",
+        data: false,
+      });
+    },
+    setName(value) {
+      this.$store.commit("setSettings", {
+        type: "name",
+        data: value,
+      });
+    },
     setInput(value) {
       let inputId = this.audioInputs.find((obj) => obj.label == value).id;
       this.$store.commit("setSettings", {

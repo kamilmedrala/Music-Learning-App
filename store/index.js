@@ -1,7 +1,9 @@
 export const state = () => ({
   settings: {
+    name: null,
     input: null,
     output: null,
+    modalActive: false,
   },
 });
 

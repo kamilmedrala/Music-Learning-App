@@ -57,7 +57,7 @@ export default class Analyser {
     });
   }
 
-  getOutputLevel() {
+  getOutputLevels() {
     if (this.isInitialized) {
       let bufferLength = this.analyser.frequencyBinCount;
       let dataArray = new Uint8Array(bufferLength);
@@ -72,16 +72,16 @@ export default class Analyser {
       // }
       // console.log(loudest);
 
-      let low = dataArray.slice(0, 5);
-      let mid = dataArray.slice(6, 100);
-      let high = dataArray.slice(101, 1023);
+      // let low = dataArray.slice(0, 5);
+      // let mid = dataArray.slice(6, 100);
+      // let high = dataArray.slice(101, 1023);
 
-      const lowLevel = Math.max.apply(null, low) / 255;
-      const midLevel = Math.max.apply(null, mid) / 255;
-      const highLevel = Math.max.apply(null, high) / 255;
+      // const lowLevel = Math.max.apply(null, low) / 255;
+      // const midLevel = Math.max.apply(null, mid) / 255;
+      // const highLevel = Math.max.apply(null, high) / 255;
 
-      const levels = [lowLevel, midLevel, highLevel];
-      return levels;
+      // const levels = [lowLevel, midLevel, highLevel];
+      return dataArray;
     }
   }
 

@@ -29,7 +29,7 @@ export default {
       });
 
       function animate() {
-        if (animator && analyzer.isInitialized) {
+        if (animator) {
           animator.animate();
         }
 

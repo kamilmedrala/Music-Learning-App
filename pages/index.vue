@@ -24,5 +24,8 @@ import HomeIllustration from "../components/HomeIllustration.vue";
 export default {
   name: "HomePage",
   components: { HeaderTitle, HomeIllustration },
+  mounted() {
+    this.$store.commit("setCurrentMode", "idle");
+  },
 };
 </script>

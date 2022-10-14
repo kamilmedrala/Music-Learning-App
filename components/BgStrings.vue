@@ -1,5 +1,6 @@
 <template>
   <div class="fixed w-full h-full z-0 inset-0 pt-[50vh]">
+    <button @click="fade()">test</button>
     <div ref="canvas-container" class="w-full h-full overflow-hidden"></div>
   </div>
 </template>
@@ -11,10 +12,22 @@ export default {
   data() {
     return {
       mode: "Init",
+      animator: null,
     };
   },
   mounted() {
     this.initCanvas();
+  },
+  computed: {
+    currentState() {
+      return this.$store.getters.getCurrentMode;
+    },
+  },
+  watch: {
+    currentState(mode) {
+      this.$store.commit[("setCurrentMode", mode)];
+      this.animator.toggleAnimation(mode);
+    },
   },
   methods: {
     initCanvas() {
@@ -23,6 +36,7 @@ export default {
       const scene = render.scene;
       const analyzer = this.$Analyser;
       const animator = new Animator(scene, analyzer);
+      this.animator = animator;
 
       window.addEventListener("resize", function () {
         render.renderResize();

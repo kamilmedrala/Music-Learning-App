@@ -1,4 +1,6 @@
+import { Clock } from "three";
 import idleAnimation from "./animation/idleAnimation";
+const clock = new Clock();
 
 export default class Animator {
   constructor(scene, analyser) {
@@ -8,20 +10,45 @@ export default class Animator {
     this.animations = {
       idle: new idleAnimation(analyser),
     };
+    this.mixers = [];
 
     //temp init
-    this.toggleAnimation(this.currentMode);
+    this._addToScene(this.animations[this.currentMode].objects);
+  }
+
+  toggleTransition(mode) {
+    const currentAnimation = this.animations[mode];
   }
 
   toggleAnimation(mode) {
-    this.currentMode = mode;
-    const currentAnimation = this.animations[mode];
-    this._addToScene(currentAnimation.objects);
+    const currentMode = this.currentMode;
+    const currentAnimation = this.animations[currentMode];
+    if (currentAnimation && currentAnimation != mode) {
+      this.mixers = currentAnimation.fadeOut(); //TODO: mixer mo być brany z IdleAnimation this.mixer i w loopie animacji sprawdzany czy tam jest
+    }
+
+    const newAnimation = this.animations[mode];
+    if (newAnimation && newAnimation != mode) {
+      [];
+      this._addToScene(newAnimation.objects);
+      this.mixers = newAnimation.fadeIn();
+      this.mixers[this.mixers.length - 1].addEventListener("finished", () => {
+        this.currentMode = mode;
+        this.mixers = [];
+      });
+    }
   }
 
   animate() {
-    if (this.currentMode) {
-      this.animations[this.currentMode].animate();
+    const delta = clock.getDelta();
+    let animation = this.animations[this.currentMode];
+    if (animation) {
+      if (this.mixers) {
+        this.mixers.forEach((mixer) => {
+          mixer.update(delta);
+        });
+      }
+      animation.animate();
     }
   }
 

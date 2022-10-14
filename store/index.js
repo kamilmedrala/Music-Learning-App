@@ -5,11 +5,16 @@ export const state = () => ({
     output: null,
     modalActive: true,
   },
+  currentMode: "idle",
 });
 
 export const getters = {
   getSettings(state) {
     return state.settings;
+  },
+
+  getCurrentMode(state) {
+    return state.currentMode;
   },
 };
 
@@ -32,6 +37,10 @@ export const mutations = {
   },
   setSettings(state, { type, data }) {
     state.settings[type] = data;
+  },
+
+  setCurrentMode(state, mode) {
+    return (state.currentMode = mode);
   },
 };
 

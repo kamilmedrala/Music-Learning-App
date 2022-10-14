@@ -11,7 +11,7 @@
         </div>
         <ul class="flex flex-wrap w-full gap-5">
           <li class="w-1/2 md:w-[300px] aspect-square">
-            <nuxt-link class="group block w-full h-full" to="/">
+            <nuxt-link class="group block w-full h-full" to="/stroik">
               <div
                 class="w-full h-full p-3 md:p-5 bg-white border border-solid border-white group-hover:border-brown-1000 rounded-md font-main text-2xl md:text-3xl transition duration-300"
               >
@@ -65,6 +65,9 @@ export default {
       if (name) name = ", " + name;
       return name;
     },
+  },
+  mounted() {
+    this.$store.commit("setCurrentMode", "idle");
   },
 };
 </script>

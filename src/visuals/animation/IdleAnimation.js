@@ -1,3 +1,12 @@
+import {
+  AnimationClip,
+  AnimationMixer,
+  Group,
+  InterpolateSmooth,
+  LoopOnce,
+  NumberKeyframeTrack,
+  VectorKeyframeTrack,
+} from "three";
 import Wave from "../Wave";
 
 export default class idleAnimation {
@@ -50,9 +59,60 @@ export default class idleAnimation {
       amplitude = buffer.reduce((a, b) => a + b, 0) / buffer.length;
 
       waves[i].updateWave(amplitude);
-      //   if (i == 0) {
-      //     console.log(amplitude);
-      //   }
     }
+  }
+
+  fadeIn() {
+    const mixers = [];
+    this.waves.forEach((wave) => {
+      const positionKF = new VectorKeyframeTrack(
+        ".position",
+        [0, 1.5],
+        [...wave.line.position, 0, 0, 0],
+        InterpolateSmooth
+      );
+      const opacityKF = new NumberKeyframeTrack(
+        ".material.opacity",
+        [0, 1],
+        [wave.line.material.opacity, wave.opacity],
+        InterpolateSmooth
+      );
+      const clip = new AnimationClip("Action", 2, [positionKF, opacityKF]);
+      const mixer = new AnimationMixer(wave.line, wave.line);
+      mixers.push(mixer);
+      const clipAction = mixer.clipAction(clip);
+      clipAction.clampWhenFinished = true;
+      clipAction.setLoop(LoopOnce);
+      clipAction.play();
+    });
+
+    return mixers;
+  }
+
+  fadeOut() {
+    const mixers = [];
+    this.waves.forEach((wave) => {
+      const positionKF = new VectorKeyframeTrack(
+        ".position",
+        [0, 1.5],
+        [...wave.line.position, 0, -0.8, 0],
+        InterpolateSmooth
+      );
+      const opacityKF = new NumberKeyframeTrack(
+        ".material.opacity",
+        [0, 1],
+        [wave.line.material.opacity, 0],
+        InterpolateSmooth
+      );
+      const clip = new AnimationClip("Action", 2, [positionKF, opacityKF]);
+      const mixer = new AnimationMixer(wave.line, wave.line);
+      mixers.push(mixer);
+      const clipAction = mixer.clipAction(clip);
+      clipAction.clampWhenFinished = true;
+      clipAction.setLoop(LoopOnce);
+      clipAction.play();
+    });
+
+    return mixers;
   }
 }

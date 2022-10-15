@@ -1,5 +1,6 @@
 import { Clock } from "three";
 import idleAnimation from "./animation/idleAnimation";
+import TunerAnimation from "./animation/TunerAnimation";
 const clock = new Clock();
 
 export default class Animator {
@@ -9,6 +10,7 @@ export default class Animator {
     this.currentMode = "idle";
     this.animations = {
       idle: new idleAnimation(analyser),
+      tuner: new TunerAnimation(analyser),
     };
     this.mixers = [];
 
@@ -16,27 +18,33 @@ export default class Animator {
     this._addToScene(this.animations[this.currentMode].objects);
   }
 
-  toggleTransition(mode) {
-    const currentAnimation = this.animations[mode];
-  }
-
   toggleAnimation(mode) {
     const currentMode = this.currentMode;
     const currentAnimation = this.animations[currentMode];
     if (currentAnimation && currentAnimation != mode) {
       console.log(mode, currentAnimation);
-      this.mixers = currentAnimation.fadeOut(); //TODO: mixer mo być brany z IdleAnimation this.mixer i w loopie animacji sprawdzany czy tam jest
+      let oldMixers = currentAnimation.fadeOut(); //TODO: mixer mo być brany z IdleAnimation this.mixer i w loopie animacji sprawdzany czy tam jest
+      if (oldMixers?.length > 0) {
+        this.mixers = oldMixers;
+        this.mixers[this.mixers.length - 1].addEventListener("finished", () => {
+          this.currentMode = mode;
+          this.mixers = [];
+        });
+      } else {
+        this.currentMode = mode;
+      }
     }
 
     const newAnimation = this.animations[mode];
     if (newAnimation && newAnimation != mode) {
-      [];
       this._addToScene(newAnimation.objects);
-      this.mixers = newAnimation.fadeIn();
-      this.mixers[this.mixers.length - 1].addEventListener("finished", () => {
-        this.currentMode = mode;
-        this.mixers = [];
-      });
+      let newMixers = newAnimation.fadeIn();
+      if (newMixers?.length > 0) {
+        this.mixers = newMixers;
+        // this.mixers[this.mixers.length - 1].addEventListener("finished", () => {
+        //   this.mixers = [];
+        // });
+      }
     }
   }
 

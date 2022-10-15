@@ -1,5 +1,6 @@
 import Analyser from "../src/logic/Analyser";
 import Vue from "vue";
+import { reactive } from "vue";
 
 window.onNuxtReady((app) => {
   app.$store.subscribe((mutation, state) => {
@@ -13,5 +14,5 @@ window.onNuxtReady((app) => {
 });
 
 export default ({ app }, inject) => {
-  inject("Analyser", new Analyser());
+  inject("Analyser", reactive(new Analyser()));
 };

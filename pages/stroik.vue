@@ -13,7 +13,9 @@
       <HeaderTitle title="Stroik" />
       <div class="mx-auto relative w-full md:w-1/2 aspect-square">
         <div class="absolute top-1/2 left-1/2 z-0">
-          <span class="text-xl text-black"> {{ currentFreq }} Hz</span>
+          <span class="text-xl text-black">
+            {{ currentFreq?.value.toFixed() }} Hz</span
+          >
         </div>
         <div
           v-for="(note, index) in noteScale"
@@ -44,7 +46,7 @@
 export default {
   data() {
     return {
-      currentFreq: 0,
+      currentFreq: this.$Analyser?.loudestFreq,
       noteScale: [
         "C",
         "C#",
@@ -63,17 +65,6 @@ export default {
   },
   mounted() {
     this.$store.commit("setCurrentMode", "tuner");
-    this.animate();
-  },
-  methods: {
-    animate() {
-      const analyser = this.$Analyser;
-      if (analyser) {
-        this.currentFreq = analyser.getLoudestFreq();
-
-        requestAnimationFrame(this.animate());
-      }
-    },
   },
 };
 </script>

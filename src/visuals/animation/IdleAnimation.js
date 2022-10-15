@@ -94,7 +94,7 @@ export default class idleAnimation {
     this.waves.forEach((wave) => {
       const positionKF = new VectorKeyframeTrack(
         ".position",
-        [0, 1.5],
+        [0, 1.4],
         [...wave.line.position, 0, -0.8, 0],
         InterpolateSmooth
       );

@@ -21,17 +21,18 @@ export const getters = {
 export const mutations = {
   initialiseStore(state) {
     // Check if the ID exists
-    if (localStorage.getItem("store")) {
-      console.log(localStorage);
+    if (localStorage.getItem("storedSettings")) {
       // Replace the state object with the stored item
       this.replaceState(
-        Object.assign(state, JSON.parse(localStorage.getItem("store")))
+        Object.assign(state, {
+          settings: JSON.parse(localStorage.getItem("storedSettings")),
+        })
       );
-      if (state.settings?.output?.id) {
-        this.$Analyser.startAnalyser(state.settings.output.id);
-      }
       if (state.settings?.input?.id) {
         this.$Analyser.startAnalyser(state.settings.input.id);
+      }
+      if (state.settings?.output?.id) {
+        this.$Analyser.setOutput(state.settings.output.id);
       }
     }
   },

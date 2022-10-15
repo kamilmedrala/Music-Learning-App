@@ -85,6 +85,23 @@ export default class Analyser {
     }
   }
 
+  getLoudestFreq() {
+    let loudestFreq = 0;
+    if (this.isInitialized) {
+      let bufferLength = this.analyser.frequencyBinCount;
+      let dataArray = new Uint8Array(bufferLength);
+      this.analyser.getByteFrequencyData(dataArray);
+
+      for (let i = 0; i < dataArray.length; i++) {
+        if (dataArray[i] == Math.max.apply(null, dataArray)) {
+          loudestFreq = i * (this.audioCtx.sampleRate / 2 / bufferLength);
+        }
+      }
+    }
+
+    return loudestFreq;
+  }
+
   setInput(audioSource) {
     if (this.audioCtx?.state != "closed" && this.isInitialized)
       this.audioCtx.close();

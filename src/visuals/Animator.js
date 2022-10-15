@@ -24,6 +24,7 @@ export default class Animator {
     const currentMode = this.currentMode;
     const currentAnimation = this.animations[currentMode];
     if (currentAnimation && currentAnimation != mode) {
+      console.log(mode, currentAnimation);
       this.mixers = currentAnimation.fadeOut(); //TODO: mixer mo być brany z IdleAnimation this.mixer i w loopie animacji sprawdzany czy tam jest
     }
 

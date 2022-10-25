@@ -7,18 +7,6 @@ export default class Analyser {
     this.output = null;
     this.isInitialized = false;
     this.loudestFreq = { value: 0 };
-
-    // const thisClass = this;
-    // requestAnimationFrame(function log() {
-    //   if (thisClass.analyser) {
-    //     let bufferLength = thisClass.analyser.frequencyBinCount;
-    //     let dataArray = new Uint8Array(bufferLength);
-    //     thisClass.analyser.getByteFrequencyData(dataArray);
-    //     const level = Math.max.apply(null, dataArray);
-    //     // console.log(level);
-    //   }
-    //   requestAnimationFrame(log);
-    // });
   }
 
   async startAnalyser(audioSource) {
@@ -51,35 +39,10 @@ export default class Analyser {
       });
   }
 
-  calcLoudestFreq() {
-    if (this.isInitialized) {
-      let bufferLength = this.analyser.frequencyBinCount;
-      let dataArray = new Uint8Array(bufferLength);
-      let nyquist = this.audioCtx.sampleRate / 2;
-      this.analyser.getByteFrequencyData(dataArray);
-
-      for (let i = 0; i < dataArray.length; i++) {
-        if (dataArray[i] == Math.max.apply(null, dataArray)) {
-          this.loudestFreq.value = i * (nyquist / bufferLength);
-        }
-      }
-    }
-  }
-
   async getDevices() {
     return navigator.mediaDevices.enumerateDevices().then((devices) => {
       return devices;
     });
-  }
-
-  getOutputLevels() {
-    if (this.isInitialized) {
-      let bufferLength = this.analyser.frequencyBinCount;
-      let dataArray = new Uint8Array(bufferLength);
-      this.analyser.getByteFrequencyData(dataArray);
-
-      return dataArray;
-    }
   }
 
   setInput(audioSource) {
@@ -94,5 +57,33 @@ export default class Analyser {
       this.audioCtx.close();
     this.output = audioOutput;
     this.startAnalyser();
+  }
+
+  getOutputLevels() {
+    if (this.isInitialized) {
+      let bufferLength = this.analyser.frequencyBinCount;
+      let dataArray = new Uint8Array(bufferLength);
+      this.analyser.getByteFrequencyData(dataArray);
+
+      return dataArray;
+    }
+  }
+
+  calcLoudestFreq() {
+    if (this.isInitialized) {
+      let bufferLength = this.analyser.frequencyBinCount;
+      let dataArray = new Uint8Array(bufferLength);
+      let nyquist = this.audioCtx.sampleRate / 2;
+      this.analyser.getByteFrequencyData(dataArray);
+
+      for (let i = 0; i < dataArray.length; i++) {
+        if (
+          dataArray[i] == Math.max.apply(null, dataArray) &&
+          dataArray[i] > 150
+        ) {
+          this.loudestFreq.value = i * (nyquist / bufferLength);
+        }
+      }
+    }
   }
 }

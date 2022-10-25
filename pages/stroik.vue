@@ -24,16 +24,21 @@
           <div
             v-for="(note, index) in noteScale"
             :key="index"
-            class="absolute z-10 top-[calc(50%-20px)] w-full h-10 ml-1/2 flex justify-end transition duration-300"
+            class="absolute z-10 top-[calc(50%-20px)] w-full h-10 ml-1/2 flex justify-end transition duration-500"
             :style="{
-              transform: 'rotate(' + (360 / noteScale.length) * index + 'deg)',
+              transform:
+                'rotate(' +
+                ((360 / noteScale.length) * index - circleRotation) +
+                'deg)',
             }"
           >
             <div
-              class="h-14 w-14 transition duration-300"
+              class="h-14 w-14 transition duration-500"
               :style="{
                 transform:
-                  'rotate(' + (360 / noteScale.length) * -index + 'deg)',
+                  'rotate(' +
+                  ((360 / noteScale.length) * -index + circleRotation) +
+                  'deg)',
               }"
             >
               <span
@@ -68,6 +73,16 @@ export default {
         "H",
       ],
     };
+  },
+  computed: {
+    circleRotation() {
+      let rotation = 0;
+      if (this.currentFreq?.value) {
+        let key = 12 * Math.log2(this.currentFreq.value / 440); // + 49 ;
+        rotation = (key / 12) * 360;
+      }
+      return rotation;
+    },
   },
   mounted() {
     this.$store.commit("setCurrentMode", "tuner");

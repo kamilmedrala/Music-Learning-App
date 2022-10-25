@@ -8,33 +8,39 @@
           〈 Back
         </span>
       </nuxt-link>
-    </div>
-    <div>
       <HeaderTitle title="Stroik" />
-      <div class="mx-auto relative w-full md:w-1/2 aspect-square">
-        <div class="absolute top-1/2 left-1/2 z-0">
+    </div>
+    <div class="mx-auto md:mr-0 max-w-sm md:w-1/2 aspect-square">
+      <div class="relative h-1/2 overflow-hidden">
+        <div class="absolute z-30 top-2/3 right-[calc(50%-40px)]">
           <span class="text-xl text-black">
             {{ currentFreq?.value.toFixed() }} Hz</span
           >
         </div>
         <div
-          v-for="(note, index) in noteScale"
-          :key="index"
-          class="absolute z-10 top-1/2 w-full h-10 ml-1/2 flex justify-end transition duration-300"
-          :style="{
-            transform: 'rotate(' + (360 / noteScale.length) * index + 'deg)',
-          }"
-        >
+          class="absolute z-20 w-full top-1/2 bottom-0 bg-gradient-to-t from-green-1000"
+        ></div>
+        <div class="relative w-full aspect-square">
           <div
-            class="h-14 w-14 transition duration-300"
+            v-for="(note, index) in noteScale"
+            :key="index"
+            class="absolute z-10 top-[calc(50%-20px)] w-full h-10 ml-1/2 flex justify-end transition duration-300"
             :style="{
-              transform: 'rotate(' + (360 / noteScale.length) * -index + 'deg)',
+              transform: 'rotate(' + (360 / noteScale.length) * index + 'deg)',
             }"
           >
-            <span
-              class="w-full h-full flex justify-center items-center text-2xl border-2 border-green-3000 rounded-full"
-              >{{ noteScale[index] }}</span
+            <div
+              class="h-14 w-14 transition duration-300"
+              :style="{
+                transform:
+                  'rotate(' + (360 / noteScale.length) * -index + 'deg)',
+              }"
             >
+              <span
+                class="w-full h-full flex justify-center items-center text-2xl border-2 border-green-3000 rounded-full"
+                >{{ noteScale[index] }}</span
+              >
+            </div>
           </div>
         </div>
       </div>

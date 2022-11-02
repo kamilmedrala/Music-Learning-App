@@ -12,7 +12,7 @@
     </div>
     <div class="mx-auto md:mr-0 max-w-sm md:w-1/2 aspect-square">
       <div class="relative h-1/2 overflow-hidden">
-        <div class="absolute z-30 top-2/3 right-[calc(50%-40px)]">
+        <div class="absolute z-30 top-2/3 right-[calc(50%-30px)]">
           <span class="text-xl text-black">
             {{ currentFreq?.value.toFixed() }} Hz</span
           >
@@ -24,7 +24,7 @@
           <div
             v-for="(note, index) in noteScale"
             :key="index"
-            class="absolute z-10 top-[calc(50%-20px)] w-full h-10 ml-1/2 flex justify-end transition duration-500"
+            class="absolute z-10 top-[calc(50%-20px)] w-full h-10 ml-1/2 flex justify-end will-change-transform transition duration-500"
             :style="{
               transform:
                 'rotate(' +
@@ -33,7 +33,7 @@
             }"
           >
             <div
-              class="h-14 w-14 transition duration-500"
+              class="h-14 w-14 will-change-transform transition duration-500"
               :style="{
                 transform:
                   'rotate(' +

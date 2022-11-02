@@ -1,4 +1,5 @@
 import Analyser from "../src/logic/Analyser";
+import LearnTrack from "../src/logic/LearnTrack";
 import Vue from "vue";
 import { reactive } from "vue";
 
@@ -15,4 +16,5 @@ window.onNuxtReady((app) => {
 
 export default ({ app }, inject) => {
   inject("Analyser", reactive(new Analyser()));
+  inject("LearnTrack", reactive(new LearnTrack()));
 };

@@ -1,14 +1,30 @@
 <template>
   <div class="relative min-h-screen bg-green-1000 px-[5%] md:px-[10%]">
-    <div class="relative z-10 mx-auto w-full container h-full min-h-screen">
-      <Nuxt />
-    </div>
+    <Transition name="zoom">
+      <!-- TODO: move modal to nav in layout to be accesible everywhere, here in start.vue shoud be forcefully opened on mounted -->
+      <SettingsModal v-if="modalActive && this.$route.name != 'index'" />
+    </Transition>
+
+    <Transition name="zoom">
+      <div
+        v-if="!modalActive || this.$route.name == 'index'"
+        class="relative z-10 mx-auto w-full container h-full min-h-screen"
+      >
+        <Nuxt />
+      </div>
+    </Transition>
     <BgStrings />
   </div>
 </template>
 
 <script>
-export default {};
+export default {
+  computed: {
+    modalActive() {
+      return this.$store.getters.getSettings.modalActive;
+    },
+  },
+};
 </script>
 
 <style>

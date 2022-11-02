@@ -39,6 +39,7 @@ export default class Animator {
     if (newAnimation && newAnimation != mode) {
       this._addToScene(newAnimation.objects);
       let newMixers = newAnimation.fadeIn();
+      // this.currentMode = mode;       //TODO: Fix animation stop
       if (newMixers?.length > 0) {
         this.mixers = newMixers;
         // this.mixers[this.mixers.length - 1].addEventListener("finished", () => {

@@ -1,5 +1,7 @@
 <template>
-  <div class="absolute inset-0 flex items-center justify-center py-20 h-screen">
+  <div
+    class="absolute inset-0 z-50 flex items-center justify-center py-20 h-screen"
+  >
     <div
       class="relative w-[450px] h-full max-h-[600px] py-8 px-10 md:px-20 bg-green-3000/50 rounded-3xl backdrop-blur-sm filter-fix overflow-auto"
     >

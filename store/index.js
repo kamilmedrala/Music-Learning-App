@@ -3,7 +3,7 @@ export const state = () => ({
     name: null,
     input: null,
     output: null,
-    modalActive: true,
+    modalActive: false,
   },
   currentMode: "idle",
 });
@@ -34,6 +34,8 @@ export const mutations = {
       if (state.settings?.output?.id) {
         this.$Analyser.setOutput(state.settings.output.id);
       }
+    } else {
+      state.modalActive = true;
     }
   },
   setSettings(state, { type, data }) {

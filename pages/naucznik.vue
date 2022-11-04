@@ -11,15 +11,56 @@
       <HeaderTitle title="Naucznik" />
       <div class="w-full h-full flex flex-col overflow-x-scroll">
         <div class="h-full">
-          <div class="flex gap-5">
-            <div v-for="(noteName, index) in noteScale" :key="index">
-              <div class="">
+          <div class="flex h-full group">
+            <div
+              class="basis-[36px] shrink-0 h-full"
+              v-for="(noteName, noteIndex) in noteScale"
+              :key="noteIndex"
+            >
+              <div class="text-center">
                 {{ noteName }}
+              </div>
+              <div class="relative h-[600px] ">
+                <template v-for="(note, index) in midiNotes?.notes">
+                  <!-- <div
+                    class="bg-green-3000 absolute left-0 right-0"
+                    :style="{
+                      height:
+                        (midiNotes?.notes[index].data[0] ==
+                        midiNotes?.notes[index - 2].data[0]
+                          ? midiNotes?.timestamps[index + 1] -
+                            midiNotes?.timestamps[index - 1]
+                          : 0) + 'px',
+                      bottom: midiNotes?.timestamps[index] + 'px',
+                    }"
+                    v-if="
+                      note.data && index > 2 && note.data[0] - 50 == noteIndex
+                    "
+                    :key="index"
+                  > -->
+                  <div
+                    class="bg-green-3000 absolute left-0 right-0 odd:!pt-0 rounded-sm group-hover:translate-y-[4000px] transition duration-[15s] ease-linear"
+                    :style="{
+                      'padding-top':
+                        
+                        midiNotes?.timestamps[index+1] -
+                          midiNotes?.timestamps[index - 1]
+                          + 'px',
+                      bottom: midiNotes?.timestamps[index] + 'px',
+                    }"
+                    v-if="
+                      note.data && index > 2 && note.data[0] - 50 == noteIndex
+                    "
+                    :key="index"
+                  >
+                    <!-- {{ note.data[0] }} -->
+                  </div>
+                </template>
               </div>
             </div>
           </div>
         </div>
-        <div class="h-[400px]">
+        <div class="h-[300px]">
           <!-- spacer for animation -->
         </div>
       </div>
@@ -73,7 +114,22 @@ export default {
   },
   computed: {
     midiNotes() {
-      return this.$LearnTrack;
+      // let trackNotes = [];
+      if (this.$LearnTrack?.parsedMidi) {
+        let rawNotes = this.$LearnTrack.parsedMidi.track?.[0].event;
+        let timestampsArray = [];
+        if (rawNotes) {
+          for (let i = 0; i < rawNotes.length; i++) {
+            let prevTimestamp = 0;
+            if (i > 0) {
+              prevTimestamp = timestampsArray[i - 1];
+            }
+            timestampsArray.push(rawNotes[i].deltaTime + prevTimestamp);
+          }
+        }
+        return { notes: rawNotes, timestamps: timestampsArray };
+      }
+      // return trackNotes;
     },
   },
   mounted() {

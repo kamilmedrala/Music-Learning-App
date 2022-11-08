@@ -1,16 +1,18 @@
 import { Clock } from "three";
 import idleAnimation from "./animation/idleAnimation";
 import TunerAnimation from "./animation/TunerAnimation";
+import TrackAnimation from "./animation/TrackAnimation";
 const clock = new Clock();
 
 export default class Animator {
-  constructor(scene, analyser) {
+  constructor(scene, analyser, track) {
     this.scene = scene;
     this.analyser = analyser;
     this.currentMode = "idle";
     this.animations = {
       idle: new idleAnimation(analyser),
       tuner: new TunerAnimation(analyser),
+      track: new TrackAnimation(track)
     };
     this.mixers = [];
 

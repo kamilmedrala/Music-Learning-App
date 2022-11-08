@@ -25,6 +25,7 @@
             :title="this.$route.params.song.replaceAll('-', ' ')"
           />
           <div class="py-5 pr-5">
+            {{ currTime }}
             <button
               class="h-14 w-14 flex flex-col justify-end items-center group bg-green-1000 rounded-full border-2 border-green-2000 hover:border-green-3000 hover:text-green-3000 transition duration-200 overflow-hidden"
               @click="togglePlay()"
@@ -50,7 +51,9 @@
         </div>
       </div>
       <div class="absolute inset-0 z-0 flex flex-col overflow-x-scroll">
-        <div class="grow-0 shrink-0 basis-[2000px] flex h-full group">
+        <div
+          class="grow-0 shrink-0 basis-[calc(100%_-_300px)] flex h-full group"
+        >
           <div
             class="basis-[36px] shrink-0 h-full"
             v-for="(noteName, noteIndex) in noteScale"
@@ -117,6 +120,7 @@ export default {
   data() {
     return {
       play: false,
+      time: 0,
       noteScale: [
         "C3",
         "C#3",
@@ -176,14 +180,22 @@ export default {
       }
       // return trackNotes;
     },
+    currTime() {
+      return this.$LearnTrack?.currentTime;
+    },
   },
   methods: {
     togglePlay() {
       this.play = !this.play;
+      if (this.play) {
+        this.$LearnTrack?.play();
+      } else {
+        this.$LearnTrack?.stop();
+      }
     },
   },
   mounted() {
-    this.$store.commit("setCurrentMode", "tuner");
+    this.$store.commit("setCurrentMode", "track");
   },
 };
 </script>

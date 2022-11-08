@@ -16,16 +16,14 @@
           </span>
         </nuxt-link>
         <div
-          class="flex flex-col md:flex-row justify-between items-center mb-5 transition duration-200"
-          :class="{ '-translate-y-[80px]': play }"
+          class="flex justify-between items-center mb-5 transition duration-200"
         >
           <HeaderTitle
-            class="capitalize transition"
-            :class="{ 'opacity-0 pointer-events-none': play }"
+            class="capitalize transition duration-200"
+            :class="{ 'opacity-0 -translate-y-10 pointer-events-none': play }"
             :title="this.$route.params.song.replaceAll('-', ' ')"
           />
           <div class="py-5 pr-5">
-            {{ currTime }}
             <button
               class="h-14 w-14 flex flex-col justify-end items-center group bg-green-1000 rounded-full border-2 border-green-2000 hover:border-green-3000 hover:text-green-3000 transition duration-200 overflow-hidden"
               @click="togglePlay()"
@@ -50,9 +48,12 @@
           </div>
         </div>
       </div>
-      <div class="absolute inset-0 z-0 flex flex-col overflow-x-scroll">
+      <div class="absolute inset-0 z-0 flex flex-col overflow-x-scroll overflow-y-hidden">
         <div
-          class="grow-0 shrink-0 basis-[calc(100%_-_300px)] flex h-full group"
+          class="grow-0 shrink-0 basis-[calc(100%_-_300px)] h-full"
+        ><div class="h-full flex"
+        :style="{transform: `translateY(${currTime * midiNotes?.notes?.[1].data[2] * 3 - 100}px)`}"
+        :class="{' transition duration-200':currTime == 0}"
         >
           <div
             class="basis-[36px] shrink-0 h-full"
@@ -60,26 +61,9 @@
             :key="noteIndex"
           >
             <div
-              class="relative h-full border-0 border-r border-black/50"
-              :class="[noteName.includes('#') ? 'bg-black/80' : 'bg-white/80']"
+              class="relative h-full"
             >
               <template v-for="(note, index) in midiNotes?.notes">
-                <!-- <div
-                  class="bg-green-3000 absolute left-0 right-0"
-                  :style="{
-                    height:
-                      (midiNotes?.notes[index].data[0] ==
-                      midiNotes?.notes[index - 2].data[0]
-                        ? midiNotes?.timestamps[index + 1] -
-                          midiNotes?.timestamps[index - 1]
-                        : 0) + 'px',
-                    bottom: midiNotes?.timestamps[index] + 'px',
-                  }"
-                  v-if="
-                    note.data && index > 2 && note.data[0] - 50 == noteIndex
-                  "
-                  :key="index"
-                > -->
                 <div
                   class="bg-green-3000 absolute left-0 right-0 rounded-sm"
                   :style="{
@@ -97,17 +81,22 @@
                   "
                   :key="index"
                 >
-                  <!-- {{ index + " " + midiNotes?.timestamps[index] }} -->
-                  <!-- {{ note.data[0] }} -->
                 </div>
               </template>
             </div>
-            <div class="text-center">
-              {{ noteName }}
-            </div>
           </div>
         </div>
-        <div class="basis-[300px] shrink-0 grow-0">
+        </div>
+        <div class="relative z-20 basis-[300px] shrink-0 grow-0 flex">
+          <div
+          v-for="(noteName, noteIndex) in noteScale"
+          :key="noteIndex"
+            class="note basis-[36px] shrink-0 h-full border-0 border-r border-black/50 text-center translate-y-0 transition duration-500"
+              :class="[noteName.includes('#') ? 'bg-black/80' : 'bg-white/80' ]"
+              :style="{'transition-delay': `${noteIndex * 20}ms`}"
+          >            
+          {{noteName}}
+          </div>
           <!-- spacer for animation -->
         </div>
       </div>
@@ -119,8 +108,8 @@
 export default {
   data() {
     return {
+      pageMounted: false,
       play: false,
-      time: 0,
       noteScale: [
         "C3",
         "C#3",
@@ -163,7 +152,6 @@ export default {
   },
   computed: {
     midiNotes() {
-      // let trackNotes = [];
       if (this.$LearnTrack?.parsedMidi) {
         let rawNotes = this.$LearnTrack.parsedMidi.track?.[0].event;
         let timestampsArray = [];
@@ -178,7 +166,6 @@ export default {
         }
         return { notes: rawNotes, timestamps: timestampsArray };
       }
-      // return trackNotes;
     },
     currTime() {
       return this.$LearnTrack?.currentTime;
@@ -194,10 +181,19 @@ export default {
       }
     },
   },
+  
   mounted() {
     this.$store.commit("setCurrentMode", "track");
   },
+
 };
 </script>
 
-<style></style>
+<style >
+.page-leave-active .note {
+  @apply duration-200 !delay-[0ms];
+}
+.page-enter .note,
+.page-leave-to .note{
+  @apply translate-y-full;
+}</style>

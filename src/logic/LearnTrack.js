@@ -29,6 +29,6 @@ export default class LearnTrack {
   }
 
   updateCurrentTime() {
-    this.currentTime = this.clock.getElapsedTime();
+    this.currentTime = this.clock.running ?  this.clock.getElapsedTime() : 0;
   }
 }

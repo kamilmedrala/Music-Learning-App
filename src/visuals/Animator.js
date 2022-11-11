@@ -14,11 +14,61 @@ export default class Animator {
       tuner: new TunerAnimation(analyser),
       track: new TrackAnimation(track)
     };
-    this.mixers = [];
+    this.newMixers = [];
+    this.oldMixers = [];
 
     //temp init
     this._addToScene(this.animations[this.currentMode].objects);
   }
+
+  // toggleAnimation(mode) {
+  //   const currentMode = this.currentMode;
+  //   const currentAnimation = this.animations[currentMode];
+  //   if (currentAnimation && currentAnimation != mode) {
+  //     console.log(mode, currentAnimation);
+  //     let oldMixers = currentAnimation.fadeOut(); //TODO: mixer mo być brany z IdleAnimation this.mixer i w loopie animacji sprawdzany czy tam jest
+  //     if (oldMixers?.length > 0) {
+  //       this.mixers = oldMixers;
+  //       this.mixers[this.mixers.length - 1].addEventListener("finished", () => {
+  //         this.currentMode = mode;
+  //         this.mixers = [];
+  //       });
+  //     } else {
+  //       this.currentMode = mode;
+  //     }
+  //   }
+
+  //   const newAnimation = this.animations[mode];
+  //   if (newAnimation && newAnimation != mode) {
+  //     this._addToScene(newAnimation.objects);
+  //     let newMixers = newAnimation.fadeIn();
+  //     // this.currentMode = mode;       //TODO: Fix animation stop
+  //     if (newMixers?.length > 0) {
+  //       this.mixers[this.mixers.length - 1].addEventListener("finished", () => {
+  //         this.mixers = newMixers;
+  //           this.mixers[this.mixers.length - 1].addEventListener("finished", () => {
+  //             // this.mixers = newMixers;
+  //               this.mixers = [];
+  //           });
+  //       });
+  //     }else{
+  //       this.mixers = [];
+  //     }
+  //   }
+  // }
+
+  // animate() {
+  //   const delta = clock.getDelta();
+  //   let animation = this.animations[this.currentMode];
+  //   if (animation) {
+  //     if (this.mixers) {
+  //       this.mixers.forEach((mixer) => {
+  //         mixer.update(delta);
+  //       });
+  //     }
+  //     animation.animate();
+  //   }
+  // }
 
   toggleAnimation(mode) {
     const currentMode = this.currentMode;
@@ -27,12 +77,13 @@ export default class Animator {
       console.log(mode, currentAnimation);
       let oldMixers = currentAnimation.fadeOut(); //TODO: mixer mo być brany z IdleAnimation this.mixer i w loopie animacji sprawdzany czy tam jest
       if (oldMixers?.length > 0) {
-        this.mixers = oldMixers;
-        this.mixers[this.mixers.length - 1].addEventListener("finished", () => {
+        this.oldMixers = oldMixers;
+        this.oldMixers[this.oldMixers.length - 1].addEventListener("finished", () => {
           this.currentMode = mode;
-          this.mixers = [];
+          this.oldMixers = [];
         });
       } else {
+        this.oldMixers = []
         this.currentMode = mode;
       }
     }
@@ -43,10 +94,12 @@ export default class Animator {
       let newMixers = newAnimation.fadeIn();
       // this.currentMode = mode;       //TODO: Fix animation stop
       if (newMixers?.length > 0) {
-        this.mixers = newMixers;
-        // this.mixers[this.mixers.length - 1].addEventListener("finished", () => {
-        //   this.mixers = [];
-        // });
+        this.newMixers = newMixers;
+        this.newMixers[this.newMixers.length - 1].addEventListener("finished", () => {
+          this.newMixers = []
+        });
+      }else{
+        this.newMixers = [];
       }
     }
   }
@@ -55,8 +108,13 @@ export default class Animator {
     const delta = clock.getDelta();
     let animation = this.animations[this.currentMode];
     if (animation) {
-      if (this.mixers) {
-        this.mixers.forEach((mixer) => {
+      if (this.oldMixers) {
+        this.oldMixers.forEach((mixer) => {
+          mixer.update(delta);
+        });
+      }
+      if (this.newMixers) {
+        this.newMixers.forEach((mixer) => {
           mixer.update(delta);
         });
       }

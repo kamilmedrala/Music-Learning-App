@@ -46,4 +46,25 @@ export default class Wave {
     this.line.geometry = geometry;
     this.phaseShift = this.phaseShift + 1 + amplitude * 16;
   }
+
+  updateWaveSpectrum(amplitudeArray) {
+    let testArray = []
+    for (let i = 0; i < 2048; i++) {
+      // this.linePoints[i].y = 
+      // console.log((-4) * Math.pow(max/min, exp));
+      let posX = ((10*Math.log10(i))/4) - 4
+      posX = posX == -Infinity ? -4 : posX
+      testArray[i] = new Vector2(posX, amplitudeArray[i]/200)
+      // console.log(10 * Math.log10(this.linePoints[i].x + 4));
+      // this.linePoints[i].x = 10 * Math.log10(this.linePoints[i].x + 4) +0.0001;
+    }
+    let newCurve = new SplineCurve(testArray);
+    let newCurvePoints = newCurve.getPoints(5000);
+    let lineGeometry = new BufferGeometry().setFromPoints(newCurvePoints);
+    // let geometry = new BufferGeometry().setFromPoints(testArray);
+
+    this.line.geometry.dispose();
+    this.line.geometry = lineGeometry;
+    lineGeometry = null
+  }
 }

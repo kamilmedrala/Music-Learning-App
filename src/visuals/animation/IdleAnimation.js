@@ -94,17 +94,17 @@ export default class idleAnimation {
     this.waves.forEach((wave) => {
       const positionKF = new VectorKeyframeTrack(
         ".position",
-        [0, 1.4],
+        [0, 0.8],
         [...wave.line.position, 0, -0.8, 0],
         InterpolateSmooth
       );
       const opacityKF = new NumberKeyframeTrack(
         ".material.opacity",
-        [0, 1],
+        [0, 0.8],
         [wave.line.material.opacity, 0],
         InterpolateSmooth
       );
-      const clip = new AnimationClip("Action", 2, [positionKF, opacityKF]);
+      const clip = new AnimationClip("Action", 0.8, [positionKF, opacityKF]);
       const mixer = new AnimationMixer(wave.line, wave.line);
       mixers.push(mixer);
       const clipAction = mixer.clipAction(clip);

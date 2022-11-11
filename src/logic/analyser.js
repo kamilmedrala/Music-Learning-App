@@ -64,7 +64,6 @@ export default class Analyser {
       let bufferLength = this.analyser.frequencyBinCount;
       let dataArray = new Uint8Array(bufferLength);
       this.analyser.getByteFrequencyData(dataArray);
-
       return dataArray;
     }
   }

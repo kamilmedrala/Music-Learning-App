@@ -48,7 +48,7 @@
           </div>
         </div>
       </div>
-      <div class="absolute inset-0 z-0 flex flex-col overflow-x-scroll overflow-y-hidden">
+      <div class="absolute inset-0 z-0 flex flex-col overflow-y-hidden">
         <div
           class="grow-0 shrink-0 basis-[calc(100%_-_70px)] xl:basis-[calc(100%_-_200px)] h-full"
         ><div class="h-full flex"
@@ -56,7 +56,7 @@
         :class="{' transition duration-200':currTime == 0}"
         >
           <div
-            class="basis-[36px] shrink-0 h-full"
+            class=" basis-auto flex-grow shrink-0 h-full"
             v-for="(noteName, noteIndex) in noteScale"
             :key="noteIndex"
           >
@@ -91,7 +91,7 @@
           <div
           v-for="(noteName, noteIndex) in noteScale"
           :key="noteIndex"
-            class="note basis-[36px] shrink-0 h-full border-0 border-r border-black/50 text-center translate-y-0 transition duration-500"
+            class="note basis-auto flex-grow shrink-0 h-full border-0 border-r border-black/50 text-[0px] 2xl:text-[10px] text-center translate-y-0 transition duration-500"
               :class="[noteName.includes('#') ? 'bg-black/80' : 'bg-white/80' ]"
               :style="{'transition-delay': `${noteIndex * 20}ms`}"
           >            

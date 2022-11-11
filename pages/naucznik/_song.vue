@@ -50,7 +50,7 @@
       </div>
       <div class="absolute inset-0 z-0 flex flex-col overflow-x-scroll overflow-y-hidden">
         <div
-          class="grow-0 shrink-0 basis-[calc(100%_-_300px)] h-full"
+          class="grow-0 shrink-0 basis-[calc(100%_-_70px)] xl:basis-[calc(100%_-_200px)] h-full"
         ><div class="h-full flex"
         :style="{transform: `translateY(${currTime * midiNotes?.notes?.[1].data[2] * 3 - 100}px)`}"
         :class="{' transition duration-200':currTime == 0}"
@@ -87,7 +87,7 @@
           </div>
         </div>
         </div>
-        <div class="relative z-20 basis-[300px] shrink-0 grow-0 flex">
+        <div class="relative z-20 basis-full shrink-0 grow-0 flex">
           <div
           v-for="(noteName, noteIndex) in noteScale"
           :key="noteIndex"

@@ -6,7 +6,7 @@ export default class Analyser {
     this.input = null;
     this.output = null;
     this.isInitialized = false;
-    this.loudestFreq = { value: 0 };
+    this.loudestFreq = { value: 0, keyId: 0 };
   }
 
   async startAnalyser(audioSource) {
@@ -78,9 +78,10 @@ export default class Analyser {
       for (let i = 0; i < dataArray.length; i++) {
         if (
           dataArray[i] == Math.max.apply(null, dataArray) &&
-          dataArray[i] > 150
+          dataArray[i] > 180
         ) {
           this.loudestFreq.value = i * (nyquist / bufferLength);
+          this.loudestFreq.keyId = 12 * Math.log2(this.loudestFreq.value / 440) + 9
         }
       }
     }

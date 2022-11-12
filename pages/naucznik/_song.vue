@@ -27,7 +27,7 @@
             <button
               class="h-14 w-14 flex flex-col justify-end items-center group bg-green-1000 rounded-full border-2 border-green-2000 hover:border-green-3000 hover:text-green-3000 transition duration-200 overflow-hidden"
               @click="togglePlay()"
-            >
+            >{{currentKey}}
               <div
                 class="shrink-0 grow-0 basis-full w-full flex-0 flex transition duration-[400ms] justify-center items-center"
                 :class="{ 'translate-y-full': play }"
@@ -87,15 +87,18 @@
           </div>
         </div>
         </div>
-        <div class="relative z-20 basis-full shrink-0 grow-0 flex">
+        <div class="relative z-20 basis-[70px] xl:basis-[200px] shrink-0 grow-0 flex">
           <div
           v-for="(noteName, noteIndex) in noteScale"
           :key="noteIndex"
-            class="note basis-auto flex-grow shrink-0 h-full border-0 border-r border-black/50 text-[0px] 2xl:text-[10px] text-center translate-y-0 transition duration-500"
-              :class="[noteName.includes('#') ? 'bg-black/80' : 'bg-white/80' ]"
+            class="note basis-auto flex-grow shrink-0 h-full border-0 border-r border-black/50 relative before:absolute before:inset-0 before:z-20 before:transition before:duration-100  translate-y-0 transition duration-500"
+              :class="[noteName.includes('#') ? 'bg-black/80' : 'bg-white/80' ,
+            {'before:bg-green-3000/50':currentKey == noteIndex}]"
               :style="{'transition-delay': `${noteIndex * 20}ms`}"
-          >            
-          {{noteName}}
+          >     
+          <span class="flex justify-center relative z-30 text-[0px] 2xl:text-[8px] ">
+            {{noteName}}
+          </span>       
           </div>
           <!-- spacer for animation -->
         </div>
@@ -110,6 +113,7 @@ export default {
     return {
       pageMounted: false,
       play: false,
+      currentFreq: this.$Analyser?.loudestFreq,
       noteScale: [
         "C3",
         "C#3",
@@ -151,6 +155,9 @@ export default {
     };
   },
   computed: {
+    currentKey(){
+      return this.currentFreq?.keyId ? Math.round(this.currentFreq.keyId) : 0
+    },
     midiNotes() {
       if (this.$LearnTrack?.parsedMidi) {
         let rawNotes = this.$LearnTrack.parsedMidi.track?.[0].event;

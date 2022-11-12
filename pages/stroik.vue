@@ -76,12 +76,7 @@ export default {
   },
   computed: {
     circleRotation() {
-      let rotation = 0;
-      if (this.currentFreq?.value) {
-        let key = 12 * Math.log2(this.currentFreq.value / 440); // + 49 ;
-        rotation = (key / 12) * 360;
-      }
-      return rotation;
+      return this.currentFreq?.keyId ? ((this.currentFreq.keyId - 9 )/12) * 360 :0;
     },
   },
   mounted() {

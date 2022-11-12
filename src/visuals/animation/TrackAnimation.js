@@ -1,10 +1,12 @@
 export default class TrackAnimation {
-    constructor(track) {
+    constructor(analyser,track) {
+      this.analyser = analyser
       this.track = track;
       this.objects = []; //TEMP
     }
   
     animate() {
+      this.analyser.calcLoudestFreq()
       this.track.updateCurrentTime()
     }
   

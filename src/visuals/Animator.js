@@ -12,7 +12,7 @@ export default class Animator {
     this.animations = {
       idle: new idleAnimation(analyser),
       tuner: new TunerAnimation(analyser),
-      track: new TrackAnimation(track)
+      track: new TrackAnimation(analyser,track)
     };
     this.newMixers = [];
     this.oldMixers = [];

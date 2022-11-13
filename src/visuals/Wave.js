@@ -54,7 +54,8 @@ export default class Wave {
       // console.log((-4) * Math.pow(max/min, exp));
       let posX = ((10*Math.log10(i))/4) - 4
       posX = posX == -Infinity ? -4 : posX
-      testArray[i] = new Vector2(posX, amplitudeArray[i]/200)
+      let posY = amplitudeArray[i] ? amplitudeArray[i]/200 : 0; 
+      testArray[i] = new Vector2(posX, posY)
       // console.log(10 * Math.log10(this.linePoints[i].x + 4));
       // this.linePoints[i].x = 10 * Math.log10(this.linePoints[i].x + 4) +0.0001;
     }

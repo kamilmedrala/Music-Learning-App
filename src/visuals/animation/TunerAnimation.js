@@ -24,7 +24,7 @@ export default class TunerAnimation {
 
   animate() {
     let amplitudeArray = this.analyser.getOutputLevels()
-
+    
     this.analyser.calcLoudestFreq();
     this.wave.updateWaveSpectrum(amplitudeArray)
   }

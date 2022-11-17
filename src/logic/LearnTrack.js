@@ -8,14 +8,30 @@ export default class LearnTrack {
     this._parseMidi("./midi/fur_elise.mid");
     this.clock = new Clock(false);
     this.currentTime = 0;
+    this.timeConstant = 1;
   }
 
   _parseMidi(url) {
     fetch(url)
       .then((response) => response.arrayBuffer())
       .then((ab) => {
-        let file = new Uint8Array(ab);
-        this.parsedMidi = MidiParser.parse(file);
+        const file = new Uint8Array(ab);
+        const parsedMidi = MidiParser.parse(file);
+
+        let rawNotes = parsedMidi.track?.[0].event;
+        let timestampsArray = [];
+        
+        if (rawNotes) {
+          for (let i = 0; i < rawNotes.length; i++) {
+            let prevTimestamp = 0;
+            if (i > 0) {
+              prevTimestamp = timestampsArray[i - 1];
+            }
+            timestampsArray.push(rawNotes[i].deltaTime + prevTimestamp);
+          }
+        }
+        this.parsedMidi = { notes: rawNotes, timestamps: timestampsArray };
+
       })
       .catch((err) => console.log(err));
   }
@@ -26,6 +42,10 @@ export default class LearnTrack {
 
   stop() {
     this.clock.stop();
+  }
+
+  setTimeConstant(value){
+    this.timeConstant = value
   }
 
   updateCurrentTime() {

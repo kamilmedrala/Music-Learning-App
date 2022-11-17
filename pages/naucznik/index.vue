@@ -10,8 +10,8 @@
       </nuxt-link>
       <HeaderTitle title="Naucznik" />
       <div>
-        <ul class="flex flex-wrap w-full gap-5">
-          <li class="w-1/2 md:w-[300px] aspect-square">
+        <ul class="flex flex-wrap w-full">
+          <li class="w-1/2 md:w-[300px] p-2.5 aspect-square">
             <nuxt-link
               class="group block w-full h-full"
               to="/naucznik/fur-elise"

@@ -28,6 +28,20 @@
     @apply font-body text-base md:text-lg;
   }
 
+  input[type=range]{
+    -webkit-appearance: none;
+  }
+
+  input[type=range]::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    @apply w-4 h-4 -mt-1.5 bg-green-3000 border-none rounded-full
+  }
+
+  input[type=range]::-webkit-slider-runnable-track {
+    -webkit-appearance: none;
+    @apply h-1.5 border-green-2000 border border-solid bg-green-1000 rounded-full
+  }
+
   .filter-fix {
     @apply backdrop-brightness-100 backdrop-contrast-100 backdrop-grayscale-0 backdrop-hue-rotate-0 backdrop-invert-0 backdrop-opacity-100 backdrop-saturate-100 backdrop-sepia-0;
   }

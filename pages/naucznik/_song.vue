@@ -16,18 +16,18 @@
           </span>
         </nuxt-link>
         <div
-          class="flex justify-between items-center mb-5 transition duration-200"
+          class="flex justify-between mb-5 transition duration-200"
         >
           <HeaderTitle
             class="capitalize transition duration-200"
             :class="{ 'opacity-0 -translate-y-10 pointer-events-none': play }"
             :title="this.$route.params.song.replaceAll('-', ' ')"
           />
-          <div class="py-5 pr-5">
+          <div class="py-5 pr-5 flex flex-col items-center">
             <button
               class="h-14 w-14 flex flex-col justify-end items-center group bg-green-1000 rounded-full border-2 border-green-2000 hover:border-green-3000 hover:text-green-3000 transition duration-200 overflow-hidden"
               @click="togglePlay()"
-            >{{currentKey}}
+            >
               <div
                 class="shrink-0 grow-0 basis-full w-full flex-0 flex transition duration-[400ms] justify-center items-center"
                 :class="{ 'translate-y-full': play }"
@@ -45,6 +45,13 @@
                 ></span>
               </div>
             </button>
+            <div class="relative h-28 md:h-32 mt-4 w-12 flex justify-center transition duration-200"
+            :class="{'translate-x-5 opacity-0':play}">
+              <input class="peer h-1.5 w-28 md:w-32 translate-y-14 md:translate-y-16 -rotate-90"  type="range" name="trackSpeed" id="trackSpeed" min="0.5" max="1" step="0.25" v-model="trackSpeed">
+              <span class="absolute h-10 flex justify-center items-center left-full transition-all duration-200 text-base peer-hover:text-xl peer-hover:font-medium"
+              :style="{'bottom':`calc(${trackSpeed*100}% - 52px)`}"
+              >x{{trackSpeed}}</span>
+            </div>
           </div>
         </div>
       </div>
@@ -52,7 +59,7 @@
         <div
           class="grow-0 shrink-0 basis-[calc(100%_-_70px)] xl:basis-[calc(100%_-_200px)] h-full"
         ><div class="h-full flex"
-        :style="{transform: `translateY(${currTime * midiNotes?.notes?.[1].data[2] * 3 - 100}px)`}"
+        :style="{transform: `translateY(${currTime * midiNotes?.notes?.[1].data[2] * 5 * trackSpeed - 100}px)`}"
         :class="{' transition duration-200':currTime == 0}"
         >
           <div
@@ -113,6 +120,7 @@ export default {
     return {
       pageMounted: false,
       play: false,
+      trackSpeed: 0.75,
       currentFreq: this.$Analyser?.loudestFreq,
       noteScale: [
         "C3",
@@ -159,20 +167,7 @@ export default {
       return this.currentFreq?.keyId ? Math.round(this.currentFreq.keyId) : 0
     },
     midiNotes() {
-      if (this.$LearnTrack?.parsedMidi) {
-        let rawNotes = this.$LearnTrack.parsedMidi.track?.[0].event;
-        let timestampsArray = [];
-        if (rawNotes) {
-          for (let i = 0; i < rawNotes.length; i++) {
-            let prevTimestamp = 0;
-            if (i > 0) {
-              prevTimestamp = timestampsArray[i - 1];
-            }
-            timestampsArray.push(rawNotes[i].deltaTime + prevTimestamp);
-          }
-        }
-        return { notes: rawNotes, timestamps: timestampsArray };
-      }
+      return this.$LearnTrack?.parsedMidi
     },
     currTime() {
       return this.$LearnTrack?.currentTime;
@@ -182,6 +177,7 @@ export default {
     togglePlay() {
       this.play = !this.play;
       if (this.play) {
+        this.$LearnTrack.setTimeConstant(this.trackSpeed)
         this.$LearnTrack?.play();
       } else {
         this.$LearnTrack?.stop();

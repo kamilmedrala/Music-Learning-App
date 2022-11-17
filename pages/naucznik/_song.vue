@@ -59,7 +59,7 @@
         <div
           class="grow-0 shrink-0 basis-[calc(100%_-_70px)] xl:basis-[calc(100%_-_200px)] h-full"
         ><div class="h-full flex"
-        :style="{transform: `translateY(${currTime * midiNotes?.notes?.[1].data[2] * 5 * trackSpeed - 100}px)`}"
+        :style="{transform: `translateY(${currTime * midiNotes?.notes?.[1].data[2] * 5 * trackSpeed - 200}px)`}"
         :class="{' transition duration-200':currTime == 0}"
         >
           <div

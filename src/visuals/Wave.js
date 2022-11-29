@@ -49,18 +49,28 @@ export default class Wave {
 
   updateWaveSpectrum(amplitudeArray) {
     let testArray = []
-    for (let i = 0; i < 2048; i++) {
+    for (let i = 4; i < amplitudeArray.length; i++) {
       // this.linePoints[i].y = 
       // console.log((-4) * Math.pow(max/min, exp));
-      let posX = ((10*Math.log10(i))/4) - 4
-      posX = posX == -Infinity ? -4 : posX
-      let posY = amplitudeArray[i] ? amplitudeArray[i]/200 : 0; 
-      testArray[i] = new Vector2(posX, posY)
+      let posX = (((10*Math.log10(i * 2.9296875))-10*Math.log10(4 * 2.9296875))/33.113) * 8 - 4
+      
+      // let min = 20
+      // let max = 20000
+      
+      // var exp = (i * 2.9296875 -0) / (max-min);
+
+      // let posX = min * Math.pow(max/min, exp);
+      posX = posX == -Infinity ? -4 : posX;
+      let posY = amplitudeArray[i] ? amplitudeArray[i]/220 : 0; 
+      if (isNaN(posX)) {
+        console.log(i,posX);
+      }
+      testArray[i-4] = new Vector2(posX, posY)
       // console.log(10 * Math.log10(this.linePoints[i].x + 4));
       // this.linePoints[i].x = 10 * Math.log10(this.linePoints[i].x + 4) +0.0001;
     }
     let newCurve = new SplineCurve(testArray);
-    let newCurvePoints = newCurve.getPoints(5000);
+    let newCurvePoints = newCurve.getPoints(8000);
     let lineGeometry = new BufferGeometry().setFromPoints(newCurvePoints);
     // let geometry = new BufferGeometry().setFromPoints(testArray);
 

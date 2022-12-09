@@ -7,6 +7,7 @@ export default class Analyser {
     this.output = null;
     this.isInitialized = false;
     this.loudestFreq = { value: 0, keyId: 0 };
+    this.loudestArray = null
   }
 
   async startAnalyser(audioSource) {
@@ -68,45 +69,20 @@ export default class Analyser {
   }
 
   calcLoudestFreq() {
-    // TODO: replace notescale
-    const tempNotesCale = [
-      "C3",
-      "C#3",
-      "D3",
-      "D#3",
-      "E3",
-      "F3",
-      "F#3",
-      "G3",
-      "G#3",
-      "A3",
-      "A#3",
-      "H3",
-      "C4",
-      "C#4",
-      "D4",
-      "D#4",
-      "E4",
-      "F4",
-      "F#4",
-      "G4",
-      "G#4",
-      "A4",
-      "A#4",
-      "H4",
-      "C5",
-      "C#5",
-      "D5",
-      "D#5",
-      "E5",
-      "F5",
-      "F#5",
-      "G5",
-      "G#5",
-      "A5",
-      "A#5",
-      "H5",
-    ]
+
+    const notes = [
+    "C",
+    "C#",
+    "D",
+    "D#",
+    "E",
+    "F",
+    "F#",
+    "G",
+    "G#",
+    "A",
+    "A#",
+    "H"]
 
     if (this.isInitialized) {
       let bufferLength = this.analyser.frequencyBinCount;
@@ -115,33 +91,26 @@ export default class Analyser {
       this.analyser.getByteFrequencyData(dataArray);
 
       let peaks = this._detectPeaks(dataArray, 8, 200);
-      var res = [0];
+      var res = [];
       for (let j = 0; j < 12; j++) {
         const max = Math.max(...peaks.map(o => o.value));
         peaks.forEach((item, index) => {
           if(item.value === max && item.value > 180){
-            res[j] = {freq: item.freq, key: tempNotesCale[Math.round(12 * Math.log2(item.freq / 440) + 21)]}
+            let key = Math.round(12 * Math.log2(item.freq / 440) + 57)
+            let note = notes[key%12]
+            let octave = Math.floor(key/12)
+            if(!res.map(o => o.key?.slice(0,-1)).includes(note)){
+              res.push({freq: item.freq, key: note + octave})
+            };
             peaks[index].value = 0
           };
         })       
       }
-      if (res[0] != 0) {
-        // console.log([...new Set(res.map(o => o.key))]);
+      if (res.length > 0) {
+        this.loudestArray = res
         this.loudestFreq.value = res[0].freq;
         this.loudestFreq.keyId = 12 * Math.log2(this.loudestFreq.value / 440) + 9
       }
-
-
-      // for (let i = 0; i < dataArray.length; i++) {
-      //   if (
-      //     dataArray[i] == Math.max.apply(null, dataArray) &&
-      //     dataArray[i] > 180
-      //   ) {
-          
-      //     this.loudestFreq.value = i * (nyquist / bufferLength);
-      //     this.loudestFreq.keyId = 12 * Math.log2(this.loudestFreq.value / 440) + 9
-      //   }
-      // }
     }
   }
 

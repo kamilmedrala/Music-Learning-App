@@ -12,7 +12,7 @@
     </div>
     <div class="flex flex-col-reverse md:flex-row justify-center items-center md:justify-between">
       <div class="self-baseline -mt-10 md:mt-5 mx-auto lg:mx-0">
-        <p>Played keys:</p>
+        <p class="font-body">Played keys:</p>
         <ul class="flex">
           <li v-for="(note,index) in noteScale" :key="index" class="block mt-8 md:mt-12 relative" 
           >

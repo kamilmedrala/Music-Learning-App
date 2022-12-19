@@ -96,11 +96,11 @@ export default class Analyser {
         const max = Math.max(...peaks.map(o => o.value));
         peaks.forEach((item, index) => {
           if(item.value === max && item.value > 180){
-            let key = Math.round(12 * Math.log2(item.freq / 440) + 57)
+            let key = Math.round(12 * Math.log2(item.freq / 440) + 45)
             let note = notes[key%12]
-            let octave = Math.floor(key/12)
             if(!res.map(o => o.key?.slice(0,-1)).includes(note)){
-              res.push({freq: item.freq, key: note + octave})
+              let octave = Math.floor(key/12)
+              res.push({freq: item.freq, key: note + octave,keyId: key})
             };
             peaks[index].value = 0
           };
@@ -109,7 +109,7 @@ export default class Analyser {
       if (res.length > 0) {
         this.loudestArray = res
         this.loudestFreq.value = res[0].freq;
-        this.loudestFreq.keyId = 12 * Math.log2(this.loudestFreq.value / 440) + 9
+        this.loudestFreq.keyId = res[0].keyId
       }
     }
   }

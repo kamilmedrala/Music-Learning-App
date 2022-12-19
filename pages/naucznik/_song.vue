@@ -165,7 +165,7 @@ export default {
   },
   computed: {
     currentKey(){
-      return this.currentFreq?.keyId ? Math.round(this.currentFreq.keyId) : 0
+      return this.currentFreq?.keyId ? this.currentFreq.keyId-36 : 0
     },
     midiNotes() {
       return this.$LearnTrack?.parsedMidi

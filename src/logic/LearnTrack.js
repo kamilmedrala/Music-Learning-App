@@ -32,11 +32,31 @@ export default class LearnTrack {
             timestampsArray.push(rawNotes[i].deltaTime + prevTimestamp);
           }
         }
-        this.parsedMidi = { notes: rawNotes, timestamps: timestampsArray };
+        let combined = []
+        rawNotes.forEach((note,index)=>{
+            if (note.type == 9) {
+              combined.push(
+                {
+                  key: note.data[0],
+                  startTime: timestampsArray[index],
+                  duration: timestampsArray[index+2] - timestampsArray[index]
+                }
+              ) 
+            }
+          }
+        )
+        this.parsedMidi = { notes: rawNotes, timestamps: timestampsArray,combined: combined };
         this.trackLength = timestampsArray[timestampsArray.length -1] + 1000;
 
       })
       .catch((err) => console.log(err));
+  }
+
+  hitCheck(){
+    if (this.parsedMidi?.notes) {
+      const relativeTime = this.parsedMidi.notes?.[1].data[2] * 5 * this.timeConstant
+      console.log(this.parsedMidi.notes.indexOf(Math.floor(relativeTime)));
+    }
   }
 
   play() {
@@ -52,7 +72,23 @@ export default class LearnTrack {
   updateCurrentTime() {
     this.currentTime = this.clock.running ?  this.clock.getElapsedTime() : 0;
     
-    let relativeTime = this.currentTime * this.parsedMidi.notes?.[1].data[2] * 5 * this.timeConstant;    
+    let relativeTime = this.currentTime * this.parsedMidi.notes?.[1].data[2] * 5 * this.timeConstant;
+
+    if(this.clock.running){
+      let searchValue = Math.round(relativeTime - 110 -96)
+      let range = 2
+      // mapować wszystki z type 9
+      let foundNote = this.parsedMidi.combined.find(val => Math.abs(val.startTime - searchValue) <= range);
+      if (foundNote) {
+        console.log(foundNote.key)
+        // if (foundNoteIndex == 0) {
+        //   foundNoteIndex = 3
+        // }
+        // if (this.parsedMidi.notes[foundNoteIndex].type == 9) {
+        //   // console.log( foundNoteIndex,this.parsedMidi.notes[foundNoteIndex].data[0] - 50);
+        // }
+      }
+    } 
     if (relativeTime >= this.trackLength - 500) {
       this.stop();
     }

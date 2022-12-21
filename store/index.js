@@ -21,7 +21,7 @@ export const getters = {
 export const mutations = {
   initialiseStore(state) {
     // Check if the ID exists
-    if (localStorage.getItem("storedSettings")) {
+    if (localStorage.getItem("storedSettings") && JSON.parse(localStorage.getItem("storedSettings")).input ) {
       // Replace the state object with the stored item
       this.replaceState(
         Object.assign(state, {
@@ -35,7 +35,7 @@ export const mutations = {
         this.$Analyser.setOutput(state.settings.output.id);
       }
     } else {
-      state.modalActive = true;
+      state.settings.modalActive = true;
     }
   },
   setSettings(state, { type, data }) {

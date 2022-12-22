@@ -25,7 +25,7 @@
           <HeaderTitle
             :title="this.$route.params.song.replaceAll('-', ' ')"
           />
-          <p class="transition" :class="{'opacity-0 translate-y-5' :!this.$LearnTrack }" >Score: <span class="text-2xl text-green-3000">{{trackScore}}</span> %</p>
+          <p class="transition" :class="{'opacity-0 translate-y-5' :!typeof trackScore == 'number' }" >Score: <span class="text-2xl text-green-3000">{{trackScore}}</span> %</p>
         </div>
           <div class="py-5 pr-5 flex flex-col items-center">
             <button
@@ -162,6 +162,11 @@ export default {
         "H5",
       ],
     };
+  },
+  watch:{
+    currentKey(key){
+      this.$LearnTrack?.hitCheck(key)
+    }
   },
   computed: {
     currentKey(){

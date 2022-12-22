@@ -54,11 +54,26 @@ export default class LearnTrack {
       .catch((err) => console.log(err));
   }
 
-  hitCheck(){
-    if (this.parsedMidi?.notes) {
-      const relativeTime = this.parsedMidi.notes?.[1].data[2] * 5 * this.timeConstant
-      console.log(this.parsedMidi.notes.indexOf(Math.floor(relativeTime)));
-    }
+  hitCheck(key){
+    let relativeTime = this.currentTime * this.parsedMidi.notes?.[1].data[2] * 5 * this.timeConstant;
+
+    if(this.clock.running){
+      let searchValue = Math.round(relativeTime - 110 -96)
+      let range = 10
+      let foundNote = this.parsedMidi.combined.find(val => Math.abs(val.startTime - searchValue) <= range);
+      if (foundNote) {
+        console.log(key,foundNote.key)
+        foundNote.hit = true
+        let hitCount = 0
+        for (const note of this.parsedMidi.combined) {
+          if (note.hit) {
+            hitCount++
+          }
+        }
+        this.score = Math.round((hitCount/this.parsedMidi.combined.length) * 100)
+      }
+    } 
+
   }
 
   play() {
@@ -75,33 +90,10 @@ export default class LearnTrack {
   }
 
   updateCurrentTime() {
-    this.currentTime = this.clock.running ?  this.clock.getElapsedTime() : 0;
+    this.currentTime = this.clock.running ?  this.clock.getElapsedTime() : 0; //TODO: switch this.currentTime to relativeTime
     
     let relativeTime = this.currentTime * this.parsedMidi.notes?.[1].data[2] * 5 * this.timeConstant;
 
-    if(this.clock.running){
-      let searchValue = Math.round(relativeTime - 110 -96)
-      let range = 2
-      // mapować wszystki z type 9
-      let foundNote = this.parsedMidi.combined.find(val => Math.abs(val.startTime - searchValue) <= range);
-      if (foundNote) {
-        console.log(foundNote.key)
-        foundNote.hit = true
-        let hitCount = 0
-        for (const note of this.parsedMidi.combined) {
-          if (note.hit) {
-            hitCount++
-          }
-        }
-        this.score = Math.round((hitCount/this.parsedMidi.combined.length) * 100)
-        // if (foundNoteIndex == 0) {
-        //   foundNoteIndex = 3
-        // }
-        // if (this.parsedMidi.notes[foundNoteIndex].type == 9) {
-        //   // console.log( foundNoteIndex,this.parsedMidi.notes[foundNoteIndex].data[0] - 50);
-        // }
-      }
-    } 
     if (relativeTime >= this.trackLength - 500) {
       this.stop();
     }

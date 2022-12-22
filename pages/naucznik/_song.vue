@@ -18,11 +18,15 @@
         <div
           class="flex justify-between mb-5 transition duration-200"
         >
+        <div
+        class="capitalize transition duration-200"
+        :class="{ 'opacity-0 -translate-y-10 pointer-events-none': isRunning }"
+        >
           <HeaderTitle
-            class="capitalize transition duration-200"
-            :class="{ 'opacity-0 -translate-y-10 pointer-events-none': isRunning }"
             :title="this.$route.params.song.replaceAll('-', ' ')"
           />
+          <p class="transition" :class="{'opacity-0 translate-y-5' :!this.$LearnTrack }" >Score: <span class="text-2xl text-green-3000">{{trackScore}}</span> %</p>
+        </div>
           <div class="py-5 pr-5 flex flex-col items-center">
             <button
               class="h-14 w-14 flex flex-col justify-end items-center group bg-green-1000 rounded-full border-2 border-green-2000 hover:border-green-3000 hover:text-green-3000 transition duration-200 overflow-hidden"
@@ -72,21 +76,17 @@
             <div
               class="relative h-full"
             >
-              <template v-for="(note, index) in midiNotes?.notes">
+              <template v-for="(note, index) in midiNotes?.combined">
                 <div
-                  class="bg-green-3000 absolute left-0 right-0 rounded-sm"
+                  class="bg-green-3000 absolute left-0 right-0 rounded-sm shadow-green-2000 transition duration-200"
+                  :class="[note.hit ? 'bg-teal-500 shadow-[0_-5px_15px_0px_rgb(0_0_0_/_0.1)]':'bg-green-3000 shadow-none']"
                   :style="{
                     'padding-top':
-                      midiNotes?.timestamps[index + 2] -
-                      midiNotes?.timestamps[index] +
-                      'px',
-                    bottom: midiNotes?.timestamps[index] + 200 + 'px',
+                      note.duration + 'px',
+                    bottom: note.startTime + 200 + 'px',
                   }"
                   v-if="
-                    note.data &&
-                    index > 2 &&
-                    note.data[0] - 50 == noteIndex &&
-                    note.type == 9
+                    note.key - 50 == noteIndex
                   "
                   :key="index"
                 >
@@ -175,6 +175,9 @@ export default {
     },
     trackLength(){
       return this.$LearnTrack?.trackLength;
+    },
+    trackScore(){
+      return this.$LearnTrack?.score;
     },
     isRunning(){
       return this.$LearnTrack?.isRunning;

@@ -3,13 +3,14 @@ import { Clock } from "three";
 
 export default class LearnTrack {
   constructor(rawMidi) {
-    this.rawMidi = rawMidi;
+    this.rawMidi = rawMidi; //TODO: pass rawMidi to _parseMidi for each new track, class should be added each time for every _song, create SwitchTrack in Animator class
     this.parsedMidi = {};
     this._parseMidi("./midi/fur_elise.mid");
     this.clock = new Clock(false);
     this.trackLength = 0;
     this.currentTime = 0;
     this.timeConstant = 1;
+    this.score = 0;
     this.isRunning = false
   }
 
@@ -39,7 +40,8 @@ export default class LearnTrack {
                 {
                   key: note.data[0],
                   startTime: timestampsArray[index],
-                  duration: timestampsArray[index+2] - timestampsArray[index]
+                  duration: timestampsArray[index+2] - timestampsArray[index],
+                  hit: false
                 }
               ) 
             }
@@ -67,6 +69,9 @@ export default class LearnTrack {
   stop() {
     this.clock.stop();
     this.isRunning = false
+    this.parsedMidi.combined.forEach(note =>{
+      note.hit = false
+    })
   }
 
   updateCurrentTime() {
@@ -81,6 +86,14 @@ export default class LearnTrack {
       let foundNote = this.parsedMidi.combined.find(val => Math.abs(val.startTime - searchValue) <= range);
       if (foundNote) {
         console.log(foundNote.key)
+        foundNote.hit = true
+        let hitCount = 0
+        for (const note of this.parsedMidi.combined) {
+          if (note.hit) {
+            hitCount++
+          }
+        }
+        this.score = Math.round((hitCount/this.parsedMidi.combined.length) * 100)
         // if (foundNoteIndex == 0) {
         //   foundNoteIndex = 3
         // }

@@ -63,7 +63,7 @@
         <div
           class="grow-0 shrink-0 basis-[calc(100%_-_70px)] xl:basis-[calc(100%_-_200px)]  overflow-hidden"
         ><div class="h-full flex"
-        :style="{transform: `translateY(${currTime * midiNotes?.notes?.[1].data[2] * 5 * trackSpeed}px)`}"
+        :style="{transform: `translateY(${currTime * 200 * trackSpeed}px)`}"
         :class="{' transition duration-200':currTime == 0}"
         >
           <div
@@ -86,7 +86,7 @@
                     bottom: note.startTime + 200 + 'px',
                   }"
                   v-if="
-                    note.key - 50 == noteIndex
+                    note.key - 48 == noteIndex
                   "
                   :key="index"
                 >
@@ -102,7 +102,7 @@
           :key="noteIndex"
             class="note basis-auto flex-grow shrink-0 h-full border-0 border-r border-black/50 relative before:absolute before:inset-0 before:z-20 before:transition before:duration-100  translate-y-0 transition duration-500"
               :class="[noteName.includes('#') ? 'bg-black/80' : 'bg-white/80' ,
-            {'before:bg-green-3000/50':currentKey == noteIndex}]"
+            {'before:bg-green-3000/50':currentKey == noteIndex + 48}]"
               :style="{'transition-delay': `${noteIndex * 20}ms`}"
           >     
           <span class="flex justify-center relative z-30 text-[0px] 2xl:text-[8px] ">
@@ -164,13 +164,14 @@ export default {
     };
   },
   watch:{
-    currentKey(key){
+    'currentFreq.keyId'(key){
+      console.log(key);
       this.$LearnTrack?.hitCheck(key)
     }
   },
   computed: {
     currentKey(){
-      return this.currentFreq?.keyId ? this.currentFreq.keyId-36 : 0
+      return this.currentFreq?.keyId ? this.currentFreq.keyId : 0
     },
     midiNotes() {
       return this.$LearnTrack?.parsedMidi

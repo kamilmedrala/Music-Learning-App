@@ -55,14 +55,14 @@ export default class LearnTrack {
   }
 
   hitCheck(key){
-    let relativeTime = this.currentTime * this.parsedMidi.notes?.[1].data[2] * 5 * this.timeConstant;
+    let relativeTime = this.currentTime * 200 * this.timeConstant;
 
     if(this.clock.running){
       let searchValue = Math.round(relativeTime - 110 -96)
-      let range = 10
+      let range = 20
       let foundNote = this.parsedMidi.combined.find(val => Math.abs(val.startTime - searchValue) <= range);
-      if (foundNote) {
-        console.log(key,foundNote.key)
+      if (foundNote?.key == key) {
+        // console.log(key,foundNote.key)
         foundNote.hit = true
         let hitCount = 0
         for (const note of this.parsedMidi.combined) {
@@ -92,7 +92,7 @@ export default class LearnTrack {
   updateCurrentTime() {
     this.currentTime = this.clock.running ?  this.clock.getElapsedTime() : 0; //TODO: switch this.currentTime to relativeTime
     
-    let relativeTime = this.currentTime * this.parsedMidi.notes?.[1].data[2] * 5 * this.timeConstant;
+    let relativeTime = this.currentTime * 200 * this.timeConstant;
 
     if (relativeTime >= this.trackLength - 500) {
       this.stop();

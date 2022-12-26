@@ -100,7 +100,7 @@ export default class Analyser {
             let note = notes[key%12]
             if(!res.map(o => o.key?.slice(0,-1)).includes(note)){
               let octave = Math.floor(key/12)
-              res.push({freq: item.freq, key: note + octave,keyId: key})
+              res.push({freq: item.freq, key: note + octave,keyId: key + 12})
             };
             peaks[index].value = 0
           };

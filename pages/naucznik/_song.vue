@@ -165,7 +165,6 @@ export default {
   },
   watch:{
     'currentFreq.keyId'(key){
-      console.log(key);
       this.$LearnTrack?.hitCheck(key)
     }
   },

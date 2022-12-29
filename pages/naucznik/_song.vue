@@ -206,7 +206,7 @@ export default {
 };
 </script>
 
-<style >
+<style scoped>
 .page-leave-active .note {
   @apply duration-200 !delay-[0ms];
 }

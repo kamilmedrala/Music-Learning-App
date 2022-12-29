@@ -24,6 +24,15 @@
           </nuxt-link>
         </li>
         <li class="w-1/2 md:w-[300px] p-2.5 aspect-square">
+          <nuxt-link class="group block w-full h-full" to="/nagrywnik">
+            <div
+              class="w-full h-full p-3 md:p-5 bg-white border border-solid border-white group-hover:border-brown-1000 rounded-md font-main text-2xl md:text-3xl transition duration-300"
+            >
+              Nagrywnik
+            </div>
+          </nuxt-link>
+        </li>
+        <li class="w-1/2 md:w-[300px] p-2.5 aspect-square">
           <nuxt-link class="group block w-full h-full" to="/">
             <div
               class="w-full h-full p-3 md:p-5 bg-white border border-solid border-white group-hover:border-brown-1000 rounded-md font-main text-2xl md:text-3xl transition duration-300"

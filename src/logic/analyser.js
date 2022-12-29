@@ -6,7 +6,7 @@ export default class Analyser {
     this.input = null;
     this.output = null;
     this.isInitialized = false;
-    this.loudestFreq = { value: 0, keyId: 0 };
+    this.loudestFreq = {vol: 0, value: 0, keyId: 0 };
     this.loudestArray = null
   }
 
@@ -100,7 +100,7 @@ export default class Analyser {
             let note = notes[key%12]
             if(!res.map(o => o.key?.slice(0,-1)).includes(note)){
               let octave = Math.floor(key/12)
-              res.push({freq: item.freq, key: note + octave,keyId: key + 12})
+              res.push({freq: item.freq, key: note + octave,keyId: key + 12,vol: item.value})
             };
             peaks[index].value = 0
           };
@@ -108,6 +108,7 @@ export default class Analyser {
       }
       if (res.length > 0) {
         this.loudestArray = res
+        this.loudestFreq.vol = res[0].vol;
         this.loudestFreq.value = res[0].freq;
         this.loudestFreq.keyId = res[0].keyId
       }

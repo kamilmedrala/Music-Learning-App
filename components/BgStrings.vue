@@ -35,7 +35,8 @@ export default {
       const scene = render.scene;
       const analyzer = this.$Analyser;
       const track = this.$LearnTrack;
-      const animator = new Animator(scene, analyzer,track);
+      const recorder = this.$Recorder;
+      const animator = new Animator(scene, analyzer,track,recorder);
       this.animator = animator;
 
       window.addEventListener("resize", function () {

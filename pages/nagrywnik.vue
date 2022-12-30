@@ -6,7 +6,6 @@
         >
           <nuxt-link
             class="group block w-full pt-10 transition duration-200"
-            :class="{ '-translate-y-full': isRecording }"
             to="/start"
           >
             <span
@@ -20,25 +19,35 @@
           >
           <div
           class="capitalize transition duration-200"
-          :class="{ 'opacity-0 -translate-y-10 pointer-events-none': isRecording }"
           >
             <HeaderTitle
               :title="'Nagrywnik'"
             />
           </div>
-            <div class="py-5 pr-5 flex flex-col items-center">
+          <div>
+            <div class="h-14 w-14 flex flex-col justify-center items-center group bg-green-1000 rounded-full border-2 border-red-300 hover:border-red-500 transition duration-200 overflow-hidden"
+            @click="toggleRecord()">
+              <span class="h-6 w-6  group-hover:bg-red-700 transition-all duration-300"
+              :class="[isRecording? 'bg-red-600 rounded-sm animate-pulse':'bg-red-400 rounded-3xl full']"></span>
             </div>
           </div>
+          </div>
         </div>
-        <div class="overflow-y-auto">
+        <div
+        ref="pianoRoll" 
+        class="overflow-y-auto">
             <div class="relative z-20 basis-[50px] xl:basis-[70px] shrink-0 grow-0 flex flex-col">
+              <div 
+               class="left-[76px] absolute z-30 w-px h-full bg-brown-2000 "
+              :style="{transform: `translateX(${currTime}px)`}"
+              ></div>
               <div
               v-for="(noteName, noteIndex) in noteScale.slice().reverse()"
               :key="noteIndex"
               class="relative flex w-max border-0 border-t border-black/5 "
               :class="[noteName.includes('#') ? 'bg-green-3000/10' : 'bg-green-3000/5']"
               >     
-                <div class="sticky left-0 flex w-min shrink-0">
+                <div class="sticky left-0 z-40 flex w-min shrink-0">
                     <span class="flex items-center h-4 xl:h-5 w-7 text-[10px] bg-green-1000 ">
                         {{noteName}}
                     </span>       
@@ -50,7 +59,19 @@
                     >
                     </div>
                 </div>
-                <div class="w-[200vw] note-track shrink-0"></div>
+                <div class="relative w-[3200px] note-track shrink-0">
+                  <template v-for="note,index in recordedNotes">
+                    <div v-if="note.keyId == Math.abs(noteIndex-47) + 24" :key="index"
+                    class="absolute top-0 h-4 xl:h-5 bg-green-3000"
+                    :style="{
+                      width: note.duration == 0 ? currTime - note.startTime + 'px' : note.duration + 'px',
+                      left: note.startTime + 'px'
+                  }"
+                    
+                    >
+                </div>
+                  </template>
+                </div>
               </div>
             </div>
         </div>
@@ -62,7 +83,6 @@
   export default {
     data() {
       return {
-        isRecording: false,
         currentFreq: this.$Analyser?.loudestFreq,
         noteScale: [
             "C2",
@@ -116,6 +136,13 @@
         ],
       };
     },
+    watch:{
+      currentKey(key){
+        if (this.isRecording) {
+          this.$Recorder.addNote(key)
+        }
+      }
+    },
     computed:{
         currentKey(){
             if (this.currentFreq?.vol > 200) {
@@ -125,17 +152,48 @@
                 return -1
             }
         },
+
+        isRecording(){
+          return this.$Recorder?.isRunning
+        },
+
+        currTime() {
+          if (this.$Recorder && this.$refs['pianoRoll']) {
+            // console.log(this.$refs['pianoRoll'].scrollLeft);
+            this.$refs['pianoRoll'].scrollLeft = this.$Recorder.currentTime - this.$refs['pianoRoll'].clientWidth/2
+          }
+          return this.$Recorder?.currentTime;
+        },
+
+        recordedNotes(){
+          if (this.$Recorder) {
+            return this.$Recorder?.notes
+          }
+          else{
+            return []
+          }
+        }
+
     },
     mounted() {
-      this.$store.commit("setCurrentMode", "track");
+      this.$store.commit("setCurrentMode", "recorder");
     },
+    methods:{
+      toggleRecord(){
+        if (!this.$Recorder?.isRunning) {
+          this.$Recorder?.start();
+        } else {
+          this.$Recorder?.stop();
+        }
+      }
+    }
   
   };
   </script>
   
-  <style scoped>
+  <style scoped> 
   .page-leave-active .note {
-    @apply duration-200 !delay-[0ms];
+    @apply duration-150 !delay-[0ms];
   }
   .page-enter .note,
   .page-leave-to .note{

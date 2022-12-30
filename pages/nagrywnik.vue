@@ -24,12 +24,17 @@
               :title="'Nagrywnik'"
             />
           </div>
-          <div>
-            <div class="h-14 w-14 flex flex-col justify-center items-center group bg-green-1000 rounded-full border-2 border-red-300 hover:border-red-500 transition duration-200 overflow-hidden"
+          <div class="flex items-center">
+            <button v-show="!isRecording && recordedNotes.length>0" class="flex justify-center items-center group bg-green-1000 rounded-full px-3 py-2 pb-1 mr-5 border-2 border-green-2000 hover:border-green-3000 transition duration-200 overflow-hidden"
+            @click="clearNotes()">
+              CLEAR
+            </button>
+
+            <button class="h-14 w-14 flex flex-col justify-center items-center group bg-green-1000 rounded-full border-2 border-red-300 hover:border-red-500 transition duration-200 overflow-hidden"
             @click="toggleRecord()">
               <span class="h-6 w-6  group-hover:bg-red-700 transition-all duration-300"
               :class="[isRecording? 'bg-red-600 rounded-sm animate-pulse':'bg-red-400 rounded-3xl full']"></span>
-            </div>
+            </button>
           </div>
           </div>
         </div>
@@ -182,9 +187,14 @@
       toggleRecord(){
         if (!this.$Recorder?.isRunning) {
           this.$Recorder?.start();
+          this.$Recorder?.clearNotes();
         } else {
           this.$Recorder?.stop();
         }
+      },
+
+      clearNotes(){
+        this.$Recorder?.clearNotes();
       }
     }
   

@@ -11,7 +11,6 @@ export default class Recorder{
     }
 
     addNote(key){
-        console.log(key);
         if (key > -1) {
             let note = {
                 keyId: key,
@@ -24,6 +23,10 @@ export default class Recorder{
             let lastNote = this.notes.find(note => note.duration == 0);
             lastNote.duration = this.currentTime - lastNote.startTime 
         }
+    }
+
+    clearNotes(){
+        this.notes = []
     }
 
     start(){
@@ -39,7 +42,13 @@ export default class Recorder{
     updateCurrentTime() {
         this.currentTime = this.clock.running ?  this.clock.getElapsedTime()*200 : 0;
         if (this.currentTime >= this.trackLength) {
-          this.stop();
+            this.stop();
         }
-      }
+    }
+
+    generateMidi(){
+        
+    }
+
+
 }

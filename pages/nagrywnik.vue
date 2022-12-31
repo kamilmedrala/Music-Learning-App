@@ -26,6 +26,11 @@
           </div>
           <div class="flex items-center">
             <button v-show="!isRecording && recordedNotes.length>0" class="flex justify-center items-center group bg-green-1000 rounded-full px-3 py-2 pb-1 mr-5 border-2 border-green-2000 hover:border-green-3000 transition duration-200 overflow-hidden"
+            @click="downloadMidi()">
+              DOWNLOAD
+            </button>
+
+            <button v-show="!isRecording && recordedNotes.length>0" class="flex justify-center items-center group bg-green-1000 rounded-full px-3 py-2 pb-1 mr-5 border-2 border-green-2000 hover:border-green-3000 transition duration-200 overflow-hidden"
             @click="clearNotes()">
               CLEAR
             </button>
@@ -195,6 +200,10 @@
 
       clearNotes(){
         this.$Recorder?.clearNotes();
+      },
+
+      downloadMidi(){
+        this.$Recorder?.generateMidi()
       }
     }
   

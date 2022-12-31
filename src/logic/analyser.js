@@ -92,7 +92,7 @@ export default class Analyser {
 
       let peaks = this._detectPeaks(dataArray, 8, 200);
       var res = [];
-      for (let j = 0; j < 12; j++) {
+      for (let j = 0; j < 12; j++) {  //sorting 12 biggest frequencies
         const max = Math.max(...peaks.map(o => o.value));
         peaks.forEach((item, index) => {
           if(item.value === max && item.value > 180){
@@ -102,7 +102,7 @@ export default class Analyser {
               let octave = Math.floor(key/12)
               res.push({freq: item.freq, key: note + octave,keyId: key + 12,vol: item.value})
             };
-            peaks[index].value = 0
+            peaks[index].value = 0 // max set to 0 to find second biggest value
           };
         })       
       }

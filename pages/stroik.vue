@@ -34,9 +34,9 @@
       </div>
       <div class="mx-auto w-full md:mr-0 max-w-sm md:w-1/2 aspect-square">
         <div class="relative h-1/2 overflow-hidden">
-          <div class="absolute z-30 top-2/3 right-[calc(50%-30px)]">
+          <div class="absolute z-30 top-2/3 right-[calc(50%-40px)]">
             <span class="text-xl text-black">
-              {{ currentFreq?.value.toFixed() }} Hz</span
+              {{ Math.round( currentFreq?.value * 10) / 10 }} Hz</span
             >
           </div>
           <div

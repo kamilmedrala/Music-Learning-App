@@ -1,3 +1,5 @@
+import { SplineCurve,Vector2 } from "three";
+
 export default class Analyser {
   constructor() {
     this.audioCtx = null;
@@ -90,19 +92,20 @@ export default class Analyser {
       let nyquist = this.audioCtx.sampleRate / 2;
       this.analyser.getByteFrequencyData(dataArray);
 
-      let peaks = this._detectPeaks(dataArray, 8, 200);
+      let peaks = this._detectPeaks(dataArray, 8, 180);
+      // console.log(peaks);
       var res = [];
-      for (let j = 0; j < 12; j++) {  //sorting 12 biggest frequencies
-        const max = Math.max(...peaks.map(o => o.value));
+      for (let j = 0; j < 12; j++) {  //sorting 12 biggest frequencies -- sorting removed, ordered as frequency
+        // const max = Math.max(...peaks.map(o => o.value));
         peaks.forEach((item, index) => {
-          if(item.value === max && item.value > 180){
-            let key = Math.round(12 * Math.log2(item.freq / 440) + 45)
-            let note = notes[key%12]
-            if(!res.map(o => o.key?.slice(0,-1)).includes(note)){
-              let octave = Math.floor(key/12)
-              res.push({freq: item.freq, key: note + octave,keyId: key + 12,vol: item.value})
-            };
-            peaks[index].value = 0 // max set to 0 to find second biggest value
+            let key = Math.round(12 * Math.log2(item.freq / 440) + 57)
+            if (key>17) {
+              let note = notes[key%12]
+              if(!res.map(o => o.key?.slice(0,-1)).includes(note)){
+                let octave = Math.floor(key/12)
+                res.push({freq: item.freq, key: note + octave,keyId: key ,vol: item.value})
+              };
+              peaks[index].value = 0 // max set to 0 to find second biggest value
           };
         })       
       }
@@ -116,16 +119,23 @@ export default class Analyser {
   }
 
   _detectPeaks(data, windowWidth, threshold){
+    let dataPoints = []
+    data.forEach((value,index)=>{
+      dataPoints.push( new Vector2(index * 24000/data.length, value))
+    })
+    let newDataCurve = new SplineCurve(dataPoints);
+    let newDataPoints = newDataCurve.getPoints(20000);
+
+    let dataValues = newDataPoints.map(point=>point.y)
       const peaks = [];
       for (let i = 0; i < data.length; i++) {
-        const start = Math.max(0, i - windowWidth);
-        const end = Math.min(data.length, i + windowWidth);
-        let deltaAcc = 0;
-        for (let a = start; a < end; a++) {
-          deltaAcc += Math.abs(data[a - 1] - data[a]);
-        }
-        if (deltaAcc > threshold) {
-          peaks.push({freq: i * 2.9296875,value:data[i]});
+        if (dataValues[i] >= threshold) {
+          const start = Math.max(0, i - windowWidth);
+          const end = Math.min(dataValues.length-1, i + windowWidth);
+          let maxInWindow = Math.max(...dataValues.slice(start, end + 1));
+          if (dataValues[i] === maxInWindow) {
+            peaks.push({freq: newDataPoints[i].x,value: newDataPoints[i].y});
+            }
         }
       }
       return peaks;

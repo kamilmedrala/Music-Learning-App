@@ -99,7 +99,7 @@ export default {
   },
   computed: {
     circleRotation() {
-      return this.currentFreq?.keyId ? ((this.currentFreq.keyId - 9 )/12) * 360 :0;
+      return this.currentFreq?.value ? ((12 * Math.log2(this.currentFreq.value / 440) + 57 - 9 )/12) * 360 :0;
     },
     playedKeys(){
       return this.$Analyser?.loudestArray

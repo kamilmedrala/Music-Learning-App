@@ -124,7 +124,7 @@ export default class Analyser {
       dataPoints.push( new Vector2(index * 24000/data.length, value))
     })
     let newDataCurve = new SplineCurve(dataPoints);
-    let newDataPoints = newDataCurve.getPoints(20000);
+    let newDataPoints = newDataCurve.getPoints(24000);
 
     let dataValues = newDataPoints.map(point=>point.y)
       const peaks = [];

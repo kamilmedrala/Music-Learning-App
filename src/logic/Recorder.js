@@ -10,6 +10,7 @@ export default class Recorder{
         this.notes = []
         this.trackLength = 3200 //16 bars
         this.track = new MidiWriter.Track()
+        this.track.setTempo(60)
     }
 
     addNote(key){
@@ -49,7 +50,7 @@ export default class Recorder{
     }
 
     generateMidi(){
-        let bpm = 60 //TEMP
+        let bpm = 60
         this.track.removeEventsByType('note')   //clear
 
         this.notes.forEach((note)=>{
@@ -64,32 +65,15 @@ export default class Recorder{
         })
 
         const midiFile = new MidiWriter.Writer(this.track);
-        // Generate the MIDI data as a Uint8Array
         const data = midiFile.buildFile();
-
-        // Create a Blob object from the MIDI data
         const blob = new Blob([data], {type: 'audio/midi'});
-
-        // Create a URL that points to the MIDI data
         const url = URL.createObjectURL(blob);
-
-        // Create an anchor element
         const a = document.createElement('a');
-
-        // Set the href and download attributes of the anchor element
         a.href = url;
         a.download = 'record.mid';
-
-        // Append the anchor element to the document
         document.body.appendChild(a);
-
-        // Click the anchor element to initiate the download
         a.click();
-
-        // Remove the anchor element from the document
         document.body.removeChild(a);
-
-        // Revoke the object URL to release the memory
         URL.revokeObjectURL(url);
     }
 

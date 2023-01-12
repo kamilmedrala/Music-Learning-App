@@ -1,0 +1,1 @@
+__NUXT_JSONP__("/nagrywnik", {data:[{}],fetch:{},mutations:[]});

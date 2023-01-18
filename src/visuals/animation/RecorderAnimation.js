@@ -2,7 +2,7 @@ export default class RecorderAnimation {
     constructor(analyser,recorder) {
       this.analyser = analyser
       this.recorder = recorder;
-      this.objects = []; //TEMP
+      this.objects = [];
     }
   
     animate() {

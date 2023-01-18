@@ -169,7 +169,6 @@
 
         currTime() {
           if (this.$Recorder && this.$refs['pianoRoll']) {
-            // console.log(this.$refs['pianoRoll'].scrollLeft);
             this.$refs['pianoRoll'].scrollLeft = this.$Recorder.currentTime - this.$refs['pianoRoll'].clientWidth/2
           }
           return this.$Recorder?.currentTime;

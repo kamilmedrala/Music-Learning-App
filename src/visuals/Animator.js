@@ -78,7 +78,7 @@ export default class Animator {
     const currentAnimation = this.animations[currentMode];
     if (currentAnimation && currentAnimation != mode) {
       console.log(mode, currentAnimation);
-      let oldMixers = currentAnimation.fadeOut(); //TODO: mixer mo być brany z IdleAnimation this.mixer i w loopie animacji sprawdzany czy tam jest
+      let oldMixers = currentAnimation.fadeOut(); 
       if (oldMixers?.length > 0) {
         this.oldMixers = oldMixers;
         this.oldMixers[this.oldMixers.length - 1].addEventListener("finished", () => {
@@ -95,7 +95,6 @@ export default class Animator {
     if (newAnimation && newAnimation != mode) {
       this._addToScene(newAnimation.objects);
       let newMixers = newAnimation.fadeIn();
-      // this.currentMode = mode;       //TODO: Fix animation stop
       if (newMixers?.length > 0) {
         this.newMixers = newMixers;
         this.newMixers[this.newMixers.length - 1].addEventListener("finished", () => {

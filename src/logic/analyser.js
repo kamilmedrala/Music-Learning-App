@@ -72,31 +72,16 @@ export default class Analyser {
 
   calcLoudestFreq() {
 
-    const notes = [
-    "C",
-    "C#",
-    "D",
-    "D#",
-    "E",
-    "F",
-    "F#",
-    "G",
-    "G#",
-    "A",
-    "A#",
-    "H"]
+    const notes = ["C","C#","D","D#","E","F","F#","G","G#","A","A#","H"]
 
     if (this.isInitialized) {
       let bufferLength = this.analyser.frequencyBinCount;
       let dataArray = new Uint8Array(bufferLength);
-      let nyquist = this.audioCtx.sampleRate / 2;
       this.analyser.getByteFrequencyData(dataArray);
 
       let peaks = this._detectPeaks(dataArray, 8, 180);
-      // console.log(peaks);
       var res = [];
-      for (let j = 0; j < 12; j++) {  //sorting 12 biggest frequencies -- sorting removed, ordered as frequency
-        // const max = Math.max(...peaks.map(o => o.value));
+      for (let j = 0; j < 12; j++) {
         peaks.forEach((item, index) => {
             let key = Math.round(12 * Math.log2(item.freq / 440) + 57)
             if (key>17) {
@@ -105,7 +90,7 @@ export default class Analyser {
                 let octave = Math.floor(key/12)
                 res.push({freq: item.freq, key: note + octave,keyId: key ,vol: item.value})
               };
-              peaks[index].value = 0 // max set to 0 to find second biggest value
+              peaks[index].value = 0
           };
         })       
       }
@@ -120,15 +105,16 @@ export default class Analyser {
 
   _detectPeaks(data, windowWidth, threshold){
     let dataPoints = []
+    let nyquist = this.audioCtx.sampleRate / 2;
     data.forEach((value,index)=>{
-      dataPoints.push( new Vector2(index * 24000/data.length, value))
+      dataPoints.push( new Vector2(index * nyquist/data.length, value))
     })
     let newDataCurve = new SplineCurve(dataPoints);
     let newDataPoints = newDataCurve.getPoints(24000);
-
+    
     let dataValues = newDataPoints.map(point=>point.y)
       const peaks = [];
-      for (let i = 0; i < data.length; i++) {
+      for (let i = 0; i < dataValues.length; i++) {
         if (dataValues[i] >= threshold) {
           const start = Math.max(0, i - windowWidth);
           const end = Math.min(dataValues.length-1, i + windowWidth);

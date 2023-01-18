@@ -62,7 +62,6 @@ export default class LearnTrack {
       let range = 20
       let foundNote = this.parsedMidi.combined.find(val => Math.abs(val.startTime - searchValue) <= range);
       if (foundNote?.key == key) {
-        // console.log(key,foundNote.key)
         foundNote.hit = true
         let hitCount = 0
         for (const note of this.parsedMidi.combined) {
@@ -90,7 +89,7 @@ export default class LearnTrack {
   }
 
   updateCurrentTime() {
-    this.currentTime = this.clock.running ?  this.clock.getElapsedTime() : 0; //TODO: switch this.currentTime to relativeTime
+    this.currentTime = this.clock.running ?  this.clock.getElapsedTime() : 0;
     
     let relativeTime = this.currentTime * 200 * this.timeConstant;
 

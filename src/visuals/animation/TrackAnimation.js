@@ -2,7 +2,7 @@ export default class TrackAnimation {
     constructor(analyser,track) {
       this.analyser = analyser
       this.track = track;
-      this.objects = []; //TEMP
+      this.objects = [];
     }
   
     animate() {

@@ -54,13 +54,13 @@ export default class Recorder{
         this.track.removeEventsByType('note')   //clear
 
         this.notes.forEach((note)=>{
-            let startSeconds = note.startTime;
-            let startBeats = startSeconds * (bpm / 60); 
+            let startSeconds = note.startTime/200;
+            let startTicks = Math.round(startSeconds * (bpm / 60) * 128); 
 
             let durationSeconds =  note.duration/200;
             let durationTicks = Math.round(durationSeconds * (bpm / 60) * 128) // 128 is resolution
 
-            this.track.addEvent(new MidiWriter.NoteEvent({pitch: note.keyId + 24, duration: 'T' + durationTicks ,time:startBeats}));
+            this.track.addEvent(new MidiWriter.NoteEvent({pitch: note.keyId + 24, duration: 'T' + durationTicks ,startTick: startTicks}));
             console.log(note.duration/200 +'s');
         })
 

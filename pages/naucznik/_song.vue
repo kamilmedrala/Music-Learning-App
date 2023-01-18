@@ -109,7 +109,6 @@
             {{noteName}}
           </span>       
           </div>
-          <!-- spacer for animation -->
         </div>
       </div>
     </div>

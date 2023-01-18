@@ -1,7 +1,6 @@
 <template>
   <div class="relative min-h-screen bg-green-1000 px-[5%] md:px-[10%]">
     <Transition name="zoom">
-      <!-- TODO: move modal to nav in layout to be accesible everywhere, here in start.vue shoud be forcefully opened on mounted -->
       <SettingsModal v-if="modalActive && this.$route.name != 'index'" />
     </Transition>
 

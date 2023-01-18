@@ -11,7 +11,6 @@ import Wave from "../Wave";
 export default class TunerAnimation {
   constructor(analyser) {
     this.analyser = analyser;
-    // this.bufferSize = 6;
     this.buffers = [];
     this.wave = new Wave(0,0);
     this.wave.line.position.y = -0.25

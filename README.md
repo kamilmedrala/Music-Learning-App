@@ -1,6 +1,6 @@
 # Music Learning App
 
-### Engineering project for university. ( Proof of a concept )
+### Engineering project for university. ( Proof of a concept ) -> [LIVE](https://kamilmedrala.github.io/Music-Learning-App/start)
 Main goal of this app was to create and implement properly working **real-time audio analyser alrogythm**.
 
 Pages: 

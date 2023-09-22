@@ -1,4 +1,19 @@
-# MusicLearning
+# Music Learning App
+
+### Engineering project for university. ( Proof of a concept )
+Main goal of this app was to create and implement properly working **real-time audio analyser alrogythm**.
+
+Pages: 
+- Stroik ( Tuner )
+- Naucznik ( Teacher )
+- Nagrywnik ( Recorder )
+
+Things that need improvement:
+- clean-up pages code by using more separate components ( ! )
+- enable custom record length
+- enable uploading own MIDI files for the Teacher page 
+
+
 
 ## Build Setup
 
